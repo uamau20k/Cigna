@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: servicios-service
+  datasource:
+    url: jdbc:mysql://host.docker.internal:3306/bd_servicios?createDatabaseIfNotExist=true
+    username: root
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 9100
+
+api:
+  base-url: http://api-gateway:9090
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
+
+logging:
+  file:
+    name: logs/servicios-service.log
+  pattern:
+    console: "%d{HH:mm:ss} %-5level %msg%n"
+    file: "%d{HH:mm:ss} %-5level %msg%n"

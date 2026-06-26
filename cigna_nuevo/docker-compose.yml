@@ -1,0 +1,104 @@
+x-common-env: &common-env
+  SECRET: "esta_es_mi_compleja_clave_secreta"
+
+services:
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "9090:9090"
+    environment:
+      <<: *common-env
+    depends_on:
+      - auth-service
+      - usuarios-service
+      - sucursales-service
+      - servicios-service
+      - agenda-service
+      - reservas-service
+      - pagos-service
+      - notificaciones-service
+      - tratamientos-service
+      - historial-service
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "9094:9094"
+    environment:
+      <<: *common-env
+
+  usuarios-service:
+    build: ./usuarios-service
+    ports:
+      - "9091:9091"
+    environment:
+      <<: *common-env
+
+  sucursales-service:
+    build: ./sucursales-service
+    ports:
+      - "9099:9099"
+    environment:
+      <<: *common-env
+
+  servicios-service:
+    build: ./servicios-service
+    ports:
+      - "9100:9100"
+    environment:
+      <<: *common-env
+
+  agenda-service:
+    build: ./agenda-service
+    ports:
+      - "9101:9101"
+    environment:
+      <<: *common-env
+    depends_on:
+      - sucursales-service
+      - usuarios-service
+
+  reservas-service:
+    build: ./reservas-service
+    ports:
+      - "9096:9096"
+    environment:
+      <<: *common-env
+    depends_on:
+      - usuarios-service
+
+  pagos-service:
+    build: ./pagos-service
+    ports:
+      - "9095:9095"
+    environment:
+      <<: *common-env
+    depends_on:
+      - reservas-service
+
+  notificaciones-service:
+    build: ./notificaciones-service
+    ports:
+      - "9102:9102"
+    environment:
+      <<: *common-env
+    depends_on:
+      - usuarios-service
+
+  tratamientos-service:
+    build: ./tratamientos-service
+    ports:
+      - "9103:9103"
+    environment:
+      <<: *common-env
+
+  historial-service:
+    build: ./historial-service
+    ports:
+      - "9097:9097"
+    environment:
+      <<: *common-env
+    depends_on:
+      - usuarios-service
+      - tratamientos-service

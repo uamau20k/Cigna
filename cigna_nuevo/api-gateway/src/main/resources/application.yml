@@ -1,0 +1,66 @@
+server:
+  port: 9090
+
+spring:
+  main:
+    web-application-type: reactive
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: esta_es_mi_compleja_clave_secreta
+
+  cloud:
+    gateway:
+      routes:
+
+        - id: auth-service
+          uri: http://auth-service:9094
+          predicates:
+            - Path=/auth/**
+
+        - id: usuarios-service
+          uri: http://usuarios-service:9091
+          predicates:
+            - Path=/usuarios/**
+
+        - id: sucursales-service
+          uri: http://sucursales-service:9099
+          predicates:
+            - Path=/sucursales/**
+
+        - id: servicios-service
+          uri: http://servicios-service:9100
+          predicates:
+            - Path=/servicios/**
+
+        - id: agenda-service
+          uri: http://agenda-service:9101
+          predicates:
+            - Path=/agendas/**
+
+        - id: reservas-service
+          uri: http://reservas-service:9096
+          predicates:
+            - Path=/reservas/**
+
+        - id: pagos-service
+          uri: http://pagos-service:9095
+          predicates:
+            - Path=/pagos/**
+
+        - id: notificaciones-service
+          uri: http://notificaciones-service:9102
+          predicates:
+            - Path=/notificaciones/**
+
+        - id: tratamientos-service
+          uri: http://tratamientos-service:9103
+          predicates:
+            - Path=/tratamientos/**
+
+        - id: historial-service
+          uri: http://historial-service:9097
+          predicates:
+            - Path=/historial/**

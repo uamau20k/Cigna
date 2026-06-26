@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: auth
+  datasource:
+    url: jdbc:mysql://host.docker.internal:3306/bd_users?createDatabaseIfNotExist=true
+    username: root
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 9094
+
+jwt:
+  secret: esta_es_mi_compleja_clave_secreta
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /doc/swagger-ui.html
