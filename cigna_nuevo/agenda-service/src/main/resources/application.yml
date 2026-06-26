@@ -1,6 +1,9 @@
 spring:
   application:
     name: agenda-service
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: UTC
   datasource:
     url: jdbc:mysql://host.docker.internal:3306/bd_agenda?createDatabaseIfNotExist=true
     username: root

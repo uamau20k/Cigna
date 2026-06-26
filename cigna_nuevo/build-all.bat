@@ -45,5 +45,9 @@ cd historial-service
 call .\mvnw package -DskipTests
 cd ..
 
+cd compras-service
+call .\mvnw package -DskipTests
+cd ..
+
 echo All services built successfully!
 docker compose up --build

@@ -29,16 +29,16 @@ public class HistorialClinicoService {
         this.webClient = webClient;
     }
 
-    public HistorialClinico guardar(HistorialClinico historial) {
+    public HistorialClinico guardar(HistorialClinico historial, String token) {
         logger.info("Guardando historial idCliente={}", historial.getIdCliente());
-        Boolean existeCliente = validarClienteRemoto(historial.getIdCliente());
+        Boolean existeCliente = validarClienteRemoto(historial.getIdCliente(), token);
         if (existeCliente == null) throw new BadRequestException("No se pudo validar el cliente");
         if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
         if (historial.getFecha() == null) historial.setFecha(new Date());
         HistorialClinico guardado = historialRepository.save(historial);
         logger.info("Historial guardado id={}", guardado.getId());
         return guardado;
-    }
+}
 
     public List<HistorialClinico> listar() {
         logger.info("Listando todos los historiales");
@@ -58,21 +58,22 @@ public class HistorialClinicoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Historial clinico no existe"));
     }
 
-    public HistorialClinico actualizar(Long id, HistorialClinico historial) {
-        logger.info("Actualizando historial id={}", id);
-        HistorialClinico existente = historialRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Historial clinico no existe"));
-        Boolean existeCliente = validarClienteRemoto(historial.getIdCliente());
-        if (existeCliente == null) throw new BadRequestException("No se pudo validar el cliente");
-        if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
-        existente.setIdCliente(historial.getIdCliente());
-        existente.setDiagnostico(historial.getDiagnostico());
-        existente.setTratamiento(historial.getTratamiento());
-        if (historial.getFecha() != null) existente.setFecha(historial.getFecha());
-        HistorialClinico actualizado = historialRepository.save(existente);
-        logger.info("Historial actualizado id={}", actualizado.getId());
-        return actualizado;
-    }
+    public HistorialClinico actualizar(Long id, HistorialClinico historial, String token) {
+    logger.info("Actualizando historial id={}", id);
+    HistorialClinico existente = historialRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Historial clinico no existe"));
+    Boolean existeCliente = validarClienteRemoto(historial.getIdCliente(), token);
+    if (existeCliente == null) throw new BadRequestException("No se pudo validar el cliente");
+    if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
+    existente.setIdCliente(historial.getIdCliente());
+    existente.setDiagnostico(historial.getDiagnostico());
+    existente.setTratamiento(historial.getTratamiento());
+    if (historial.getFecha() != null) existente.setFecha(historial.getFecha());
+    HistorialClinico actualizado = historialRepository.save(existente);
+    logger.info("Historial actualizado id={}", actualizado.getId());
+    return actualizado;
+}
+
 
     public void eliminar(Long id) {
         logger.info("Eliminando historial id={}", id);
@@ -81,10 +82,11 @@ public class HistorialClinicoService {
         logger.info("Historial eliminado id={}", id);
     }
 
-    private Boolean validarClienteRemoto(Long idCliente) {
-        try {
+    private Boolean validarClienteRemoto(Long idCliente, String token) {
+     try {
             return webClient.get()
                     .uri(String.format(clientePath, idCliente))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
@@ -93,7 +95,8 @@ public class HistorialClinicoService {
             throw new BadRequestException("No se pudo conectar con el servicio de clientes");
         }
     }
-        public Boolean existePorId(Long id) {
+
+    public Boolean existePorId(Long id) {  
         return historialRepository.existsById(id);
-        }
+    }
 }

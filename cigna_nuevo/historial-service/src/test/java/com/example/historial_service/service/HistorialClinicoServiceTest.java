@@ -51,6 +51,7 @@ class HistorialClinicoServiceTest {
 
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
         // GIVEN
+        when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
 
         when(responseSpec.bodyToMono(Boolean.class)).thenReturn(Mono.just(Boolean.TRUE));
     }
@@ -64,7 +65,7 @@ class HistorialClinicoServiceTest {
 
         when(historialRepository.save(any())).thenReturn(guardado);
 
-        HistorialClinico resultado = historialService.guardar(h);
+        HistorialClinico resultado = historialService.guardar(h, "Bearer token-test");
 
         // WHEN
 
@@ -135,7 +136,7 @@ class HistorialClinicoServiceTest {
 
         when(historialRepository.save(any())).thenReturn(cambios);
 
-        HistorialClinico resultado = historialService.actualizar(1L, cambios);
+        HistorialClinico resultado = historialService.actualizar(1L, cambios, "Bearer token-test");
         assertNotNull(resultado);
         verify(historialRepository).save(any());
     }

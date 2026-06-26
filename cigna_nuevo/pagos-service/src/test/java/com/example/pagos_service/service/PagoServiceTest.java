@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings({"unchecked", "rawtypes"}) // Para evitar advertencias de tipo sin usar
+@SuppressWarnings({"unchecked", "rawtypes"})
 @ExtendWith(MockitoExtension.class)
 class PagoServiceTest {
     private PagoService pagoService;
@@ -44,53 +44,37 @@ class PagoServiceTest {
     }
 
     private void mockCompraExistente() {
-        // GIVEN
-
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        // GIVEN
-
         when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        // GIVEN
-
+        when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        // GIVEN
-
         when(responseSpec.bodyToMono(Boolean.class)).thenReturn(Mono.just(Boolean.TRUE));
     }
-
 
     @Test
     void testGuardar() {
         mockCompraExistente();
-        // create Pago with fields required by the model (IVA and total will be set by the service)
         Pago pago = new Pago(1L, 1L, 1000, 0, 10, 0, "Tarjeta", new Date());
-        // GIVEN
-
         when(pagoRepository.save(any(Pago.class))).thenReturn(pago);
-        Pago resultado = pagoService.guardar(pago);
-        // WHEN
-
+        Pago resultado = pagoService.guardar(pago, "Bearer token-test");
         assertNotNull(resultado);
         assertEquals("Tarjeta", resultado.getMedioPago());
         verify(pagoRepository).save(any(Pago.class));
     }
+
     @Test
     void testListar() {
-        // subtotal=5000, iva=5000*19/100=950, total=5950
-        // GIVEN
-
         when(pagoRepository.findAll()).thenReturn(List.of(new Pago(1L, 1L, 5000, 950, 0, 5950, "Tarjeta", new Date())));
         List<Pago> pagos = pagoService.listar();
         assertNotNull(pagos);
         assertEquals(1, pagos.size());
         verify(pagoRepository).findAll();
     }
+
     @Test
     void testObtenerPorId() {
         Long id = 1L;
         Pago pago = new Pago(id, 1L, 1000, 190, 10, 1090, "Tarjeta", new Date());
-        // GIVEN
-
         when(pagoRepository.findById(id)).thenReturn(Optional.of(pago));
         Pago resultado = pagoService.obtenerPorId(id);
         assertNotNull(resultado);
@@ -103,18 +87,13 @@ class PagoServiceTest {
         mockCompraExistente();
         Long id = 1L;
         Pago existente = new Pago(id, 1L, 1000, 190, 10, 1090, "Tarjeta", new Date());
-        // GIVEN
-
         when(pagoRepository.findById(id)).thenReturn(Optional.of(existente));
 
-        // cambios: nuevo valor neto 2000, descuento 0 -> subtotal 2000, iva 380, total 2380
         Pago cambios = new Pago(id, 2L, 2000, 0, 0, 0, "Efectivo", new Date());
         Pago guardado = new Pago(id, 2L, 2000, 380, 0, 2380, "Efectivo", cambios.getFecha());
-        // GIVEN
-
         when(pagoRepository.save(any(Pago.class))).thenReturn(guardado);
 
-        Pago resultado = pagoService.actualizar(id, cambios);
+        Pago resultado = pagoService.actualizar(1L, cambios, "Bearer token-test");
 
         assertNotNull(resultado);
         assertEquals(id, resultado.getId());
@@ -130,8 +109,6 @@ class PagoServiceTest {
     @Test
     void testEliminar() {
         Long id = 1L;
-        // GIVEN
-
         when(pagoRepository.existsById(id)).thenReturn(true);
         pagoService.eliminar(id);
         verify(pagoRepository).deleteById(id);
@@ -139,11 +116,8 @@ class PagoServiceTest {
 
     @Test
     void testCalcularSubtotal() {
-        // caso válido
-        int subtotal = pagoService.calcularSubtotal(1000, 10); // 1000 - 10% = 900
+        int subtotal = pagoService.calcularSubtotal(1000, 10);
         assertEquals(900, subtotal);
-
-        // casos inválidos
         assertThrows(IllegalArgumentException.class, () -> pagoService.calcularSubtotal(-1, 10));
         assertThrows(IllegalArgumentException.class, () -> pagoService.calcularSubtotal(1000, -5));
         assertThrows(IllegalArgumentException.class, () -> pagoService.calcularSubtotal(1000, 101));
@@ -151,10 +125,8 @@ class PagoServiceTest {
 
     @Test
     void testCalcularIVA() {
-        // caso válido
-        int iva = pagoService.calcularIVA(1000); // 19% de 1000 = 190
+        int iva = pagoService.calcularIVA(1000);
         assertEquals(190, iva);
-        // caso inválido
         assertThrows(IllegalArgumentException.class, () -> pagoService.calcularIVA(-50));
     }
 }

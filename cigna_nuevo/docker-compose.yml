@@ -102,3 +102,13 @@ services:
     depends_on:
       - usuarios-service
       - tratamientos-service
+
+  compras-service:
+    build: ./compras-service
+    ports: 
+      - "9098:9098"
+    environment:  
+      <<: *common-env
+    depends_on:
+      - usuarios-service  
+      - servicios-service

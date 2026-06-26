@@ -28,9 +28,8 @@ public class AgendaDTO {
     private Long idSucursal;
 
     @NotNull(message = "La fecha es obligatoria")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Schema(description = "Fecha del bloque horario")
-    private Date fecha;
+    @Schema(description = "Fecha del bloque horario", example = "2026-10-01")
+    private Date fecha; 
 
     @NotBlank(message = "La hora de inicio es obligatoria")
     @Schema(description = "Hora de inicio del bloque", example = "09:00")

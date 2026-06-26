@@ -91,7 +91,7 @@ public class HistorialClinicoControllerTest {
     @DisplayName("POST /historial - crea historial correctamente")
     void testCrear() throws Exception {
         // GIVEN
-        when(historialService.guardar(any())).thenReturn(historial);
+        when(historialService.guardar(any(), anyString())).thenReturn(historial);
 
         // WHEN / THEN
         mockMvc.perform(post("/historial")
@@ -99,22 +99,22 @@ public class HistorialClinicoControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.id").value(1L));
-        verify(historialService, times(1)).guardar(any());
+        verify(historialService, times(1)).guardar(any(), anyString());
     }
 
     @Test
     @DisplayName("PUT /historial/{id} - actualiza historial correctamente")
     void testActualizar() throws Exception {
         // GIVEN
-        when(historialService.actualizar(eq(1L), any())).thenReturn(historial);
-
+        when(historialService.actualizar(eq(1L), any(), anyString())).thenReturn(historial);
+        
         // WHEN / THEN
         mockMvc.perform(put("/historial/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
-        verify(historialService, times(1)).actualizar(eq(1L), any());
+        verify(historialService, times(1)).actualizar(eq(1L), any(), anyString());
     }
 
     @Test

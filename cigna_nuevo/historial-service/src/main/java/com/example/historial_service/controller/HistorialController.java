@@ -28,11 +28,13 @@ public class HistorialController {
 
     @PostMapping
     @Operation(summary = "Crear historial clinico")
-    public ResponseEntity<HistorialClinicoDTO> crear(@Valid @RequestBody HistorialClinicoDTO dto) {
+    public ResponseEntity<HistorialClinicoDTO> crear(
+            @Valid @RequestBody HistorialClinicoDTO dto,
+            @RequestHeader("Authorization") String token) {
         logger.info("POST /historial - idCliente={}", dto.getIdCliente());
-        HistorialClinico nuevo = historialService.guardar(dto.toModel());
+        HistorialClinico nuevo = historialService.guardar(dto.toModel(), token);
         return ResponseEntity.ok(HistorialClinicoDTO.fromModel(nuevo));
-    }
+}
 
     @GetMapping
     @Operation(summary = "Listar todos los historiales")
@@ -60,11 +62,13 @@ public class HistorialController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar historial clinico")
-    public ResponseEntity<HistorialClinicoDTO> actualizar(@PathVariable Long id,
-                                                        @Valid @RequestBody HistorialClinicoDTO dto) {
-        logger.info("PUT /historial/{}", id);
-        HistorialClinico actualizado = historialService.actualizar(id, dto.toModel());
-        return ResponseEntity.ok(HistorialClinicoDTO.fromModel(actualizado));
+    public ResponseEntity<HistorialClinicoDTO> actualizar(
+        @PathVariable Long id,
+        @Valid @RequestBody HistorialClinicoDTO dto,
+        @RequestHeader("Authorization") String token) {
+    logger.info("PUT /historial/{}", id);
+    HistorialClinico actualizado = historialService.actualizar(id, dto.toModel(), token);
+    return ResponseEntity.ok(HistorialClinicoDTO.fromModel(actualizado));
     }
 
     @DeleteMapping("/{id}")
@@ -78,5 +82,5 @@ public class HistorialController {
     @Operation(summary = "Verificar si existe un historial")
     public ResponseEntity<Boolean> existe(@PathVariable Long id) {
         return ResponseEntity.ok(historialService.existePorId(id));
-}
+    }
 }

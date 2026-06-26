@@ -1,6 +1,9 @@
 package com.example.pagos_service.controller;
 
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -93,7 +96,7 @@ public class PagoControllerTest {
 
     @Test
     public void testCrearPago() throws Exception {
-        when(pagoService.guardar(any(Pago.class))).thenReturn(pago);
+        when(pagoService.guardar(any(Pago.class), anyString())).thenReturn(pago);
 
         mockMvc.perform(post("/pagos")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -109,7 +112,7 @@ public class PagoControllerTest {
 
     @Test
     public void testActualizarPago() throws Exception {
-        when(pagoService.actualizar(eq((long)1), any(Pago.class))).thenReturn(pago);
+        when(pagoService.actualizar(anyLong(), any(Pago.class), anyString())).thenReturn(pago);
 
         mockMvc.perform(put("/pagos/1")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,18 +33,20 @@ public class PagoController {
     }
 
     @PostMapping
-    public ResponseEntity<PagoDTO> crearPago(@Valid @RequestBody PagoDTO pagoDto) {
-        try {
-            logger.info("POST /pagos - Creando pago: idCompra={}, totalPagar={}", 
-                pagoDto.getIdCompra(), pagoDto.getTotalPagar());
-            Pago nuevoPago = pagoService.guardar(pagoDto.toModel());
-            logger.info("Pago creado exitosamente id={}", nuevoPago.getId());
-            return ResponseEntity.ok(PagoDTO.fromModel(nuevoPago));
-        } catch (Exception e) {
-            logger.error("Error al crear pago: {}", e.getMessage(), e);
-            throw e;
-        }
+        public ResponseEntity<PagoDTO> crearPago(
+        @Valid @RequestBody PagoDTO pagoDto,
+        @RequestHeader("Authorization") String token) {
+    try {
+        logger.info("POST /pagos - Creando pago: idCompra={}, totalPagar={}", 
+            pagoDto.getIdCompra(), pagoDto.getTotalPagar());
+        Pago nuevoPago = pagoService.guardar(pagoDto.toModel(), token);
+        logger.info("Pago creado exitosamente id={}", nuevoPago.getId());
+        return ResponseEntity.ok(PagoDTO.fromModel(nuevoPago));
+    } catch (Exception e) {
+        logger.error("Error al crear pago: {}", e.getMessage(), e);
+        throw e;
     }
+}
 
     @GetMapping
     public ResponseEntity<List<PagoDTO>> listarPagos() {
@@ -67,17 +71,20 @@ public class PagoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PagoDTO> actualizarPago(@PathVariable Long id, @Valid @RequestBody PagoDTO pagoDto) {
-        logger.info("PUT /pagos/{} - Actualizando pago", id);
-        try {
-            Pago actualizado = pagoService.actualizar(id, pagoDto.toModel());
-            logger.info("Pago actualizado exitosamente id={}", id);
-            return ResponseEntity.ok(PagoDTO.fromModel(actualizado));
-        } catch (Exception e) {
-            logger.error("Error al actualizar pago id={}: {}", id, e.getMessage());
-            throw e;
-        }
+    public ResponseEntity<PagoDTO> actualizarPago(
+        @PathVariable Long id,
+        @Valid @RequestBody PagoDTO pagoDto,
+        @RequestHeader("Authorization") String token) {
+    logger.info("PUT /pagos/{} - Actualizando pago", id);
+    try {
+        Pago actualizado = pagoService.actualizar(id, pagoDto.toModel(), token);
+        logger.info("Pago actualizado exitosamente id={}", id);
+        return ResponseEntity.ok(PagoDTO.fromModel(actualizado));
+    } catch (Exception e) {
+        logger.error("Error al actualizar pago id={}: {}", id, e.getMessage());
+        throw e;
     }
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarPago(@PathVariable Long id) {

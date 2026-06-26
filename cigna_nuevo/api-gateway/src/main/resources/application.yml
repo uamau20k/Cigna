@@ -64,3 +64,8 @@ spring:
           uri: http://historial-service:9097
           predicates:
             - Path=/historial/**
+
+        - id: compras-service
+          uri: http://compras-service:9098
+          predicates:
+            - Path=/compras/**

@@ -54,9 +54,11 @@ cd notificaciones-service
 .\mvnw spring-boot:run
 ```
 
-## Ejecución con Docker
+## Ejecución con Docker y rebuild
 ```bash
 docker compose up notificaciones-service --build
+
+docker-compose up -d --build notificaciones-service 
 ```
 
 ## Ejecutar pruebas

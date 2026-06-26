@@ -45,4 +45,8 @@ cd historial-service
 call .\mvnw clean
 cd ..
 
+cd compras-service
+call .\mvnw clean
+cd ..
+
 echo Done!

@@ -35,17 +35,29 @@ public class NotificacionService {
     }
 
     public Notificacion guardar(Notificacion notificacion) {
-        logger.info("Guardando notificacion");
-        Notificacion guardado = notificacionRepository.save(notificacion);
-        logger.info("Notificacion guardado id={}", guardado.getId());
-        return guardado;
+    logger.info("Guardando notificacion");
+    if (notificacion.getFechaEnvio() == null) {
+        notificacion.setFechaEnvio(new java.util.Date());
     }
+    if (notificacion.getLeido() == null) {
+        notificacion.setLeido(false);
+    }
+    logger.info("Antes de guardar: fechaEnvio={}, leido={}", 
+        notificacion.getFechaEnvio(), notificacion.getLeido());
+    Notificacion guardado = notificacionRepository.save(notificacion);
+    logger.info("Notificacion guardado id={}, fechaEnvio={}", 
+        guardado.getId(), guardado.getFechaEnvio());
+    return guardado;
+}
 
     public Notificacion actualizar(Long id, Notificacion notificacion) {
         logger.info("Actualizando notificacion id={}", id);
         if (!notificacionRepository.existsById(id))
             throw new ResourceNotFoundException("Notificacion no existe con id: " + id);
         notificacion.setId(id);
+        if (notificacion.getFechaEnvio() == null) {  // <-- agrega esto
+            notificacion.setFechaEnvio(new java.util.Date());
+        }
         Notificacion actualizado = notificacionRepository.save(notificacion);
         logger.info("Notificacion actualizado id={}", id);
         return actualizado;

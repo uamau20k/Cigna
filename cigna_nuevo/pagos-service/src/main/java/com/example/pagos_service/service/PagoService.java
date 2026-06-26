@@ -28,7 +28,7 @@ public class PagoService {
         this.webClient = webClient;
     }
 
-    public Pago guardar(Pago pago) {
+    public Pago guardar(Pago pago, String token) {
         logger.info("Iniciando guardar pago con idCompra={}, Neto={}, Dcto{}, MedioPago={}", 
             pago.getIdCompra(), pago.getValorNeto(), pago.getDescuento(),pago.getMedioPago());
             pago.setIva(calcularIVA(calcularSubtotal(pago.getValorNeto(),pago.getDescuento())));
@@ -46,6 +46,7 @@ public class PagoService {
             logger.info("Realizando petición a api-gateway: {}", uri);
             Boolean existeCompra = webClient.get()
                     .uri(String.format(compraPath, pago.getIdCompra()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
@@ -88,57 +89,57 @@ public class PagoService {
         return pago;
     }
 
-    public Pago actualizar(Long id, Pago pago) {
-        logger.info("Iniciando actualizar pago id={}", id);
-        try {
-            Pago existente = pagoRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Pago no existe"));
+    public Pago actualizar(Long id, Pago pago, String token) {  
+    logger.info("Iniciando actualizar pago id={}", id);
+    try {
+        Pago existente = pagoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pago no existe"));
 
-            if (pago.getValorNeto() <= 0) throw new IllegalArgumentException("Valor Neto requerido");
-            if (pago.getMedioPago() == null || pago.getMedioPago().isBlank()) throw new IllegalArgumentException("Medio Pago Requerido");
-            if (pago.getFecha() == null) pago.setFecha(new Date());
+        if (pago.getValorNeto() <= 0) throw new IllegalArgumentException("Valor Neto requerido");
+        if (pago.getMedioPago() == null || pago.getMedioPago().isBlank()) throw new IllegalArgumentException("Medio Pago Requerido");
+        if (pago.getFecha() == null) pago.setFecha(new Date());
 
-            logger.info("Validando existencia de compra para pago idCompra={}", pago.getIdCompra());
-            Boolean existeCompra = webClient.get()
-                    .uri(String.format(compraPath, pago.getIdCompra()))
-                    .retrieve()
-                    .bodyToMono(Boolean.class)
-                    .block();
+        logger.info("Validando existencia de compra para pago idCompra={}", pago.getIdCompra());
+        Boolean existeCompra = webClient.get()
+                .uri(String.format(compraPath, pago.getIdCompra()))
+                .header("Authorization", token)  
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .block();
 
-            logger.info("Respuesta de validación compra: {}", existeCompra);
+        logger.info("Respuesta de validación compra: {}", existeCompra);
 
-            if (existeCompra == null) {
-                logger.error("No se pudo validar la existencia de la compra");
-                throw new BadRequestException("No se pudo validar la existencia de la compra");
-            }
-            if (Boolean.FALSE.equals(existeCompra)) {
-                logger.warn("Compra no existe con id={}", pago.getIdCompra());
-                throw new ResourceNotFoundException("Compra no existe");
-            }
-
-            existente.setIdCompra(pago.getIdCompra());
-            // Calcular IVA y totalPagar usando las mismas funciones que en guardar
-            int valorNeto = pago.getValorNeto();
-            int descuento = pago.getDescuento();
-            int subtotal = calcularSubtotal(valorNeto, descuento);
-            int iva = calcularIVA(subtotal);
-            int totalPagar = subtotal + iva;
-
-            existente.setValorNeto(valorNeto);
-            existente.setIva(iva);
-            existente.setDescuento(descuento);
-            existente.setTotalPagar(totalPagar);
-            existente.setMedioPago(pago.getMedioPago());
-            existente.setFecha(pago.getFecha());
-
-            Pago actualizado = pagoRepository.save(existente);
-            logger.info("Pago actualizado exitosamente id={}", actualizado.getId());
-            return actualizado;
-        } catch (Exception e) {
-            logger.error("Error al actualizar pago id={}: {}", id, e.getMessage(), e);
-            throw e;
+        if (existeCompra == null) {
+            logger.error("No se pudo validar la existencia de la compra");
+            throw new BadRequestException("No se pudo validar la existencia de la compra");
         }
+        if (Boolean.FALSE.equals(existeCompra)) {
+            logger.warn("Compra no existe con id={}", pago.getIdCompra());
+            throw new ResourceNotFoundException("Compra no existe");
+        }
+
+        existente.setIdCompra(pago.getIdCompra());
+        int valorNeto = pago.getValorNeto();
+        int descuento = pago.getDescuento();
+        int subtotal = calcularSubtotal(valorNeto, descuento);
+        int iva = calcularIVA(subtotal);
+        int totalPagar = subtotal + iva;
+
+        existente.setValorNeto(valorNeto);
+        existente.setIva(iva);
+        existente.setDescuento(descuento);
+        existente.setTotalPagar(totalPagar);
+        existente.setMedioPago(pago.getMedioPago());
+        existente.setFecha(pago.getFecha());
+
+        Pago actualizado = pagoRepository.save(existente);
+        logger.info("Pago actualizado exitosamente id={}", actualizado.getId());
+        return actualizado;
+    } catch (Exception e) {
+        logger.error("Error al actualizar pago id={}: {}", id, e.getMessage(), e);
+        throw e;
     }
+}
 
     public void eliminar(Long id) {
         logger.info("Iniciando eliminación de pago id={}", id);
