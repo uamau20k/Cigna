@@ -43,7 +43,7 @@ public class HistorialClinicoControllerTest {
         historial = new HistorialClinico(1L, 1L, new java.util.Date(), "Hipertension", "Medicacion");
         dto = new HistorialClinicoDTO();
         dto.setId(1L);
-        dto.setIdCliente(1L);
+        dto.setIdUsuario(1L);
         dto.setDiagnostico("Hipertension");
         dto.setTratamiento("Medicacion");
         mockMvc = MockMvcBuilders.standaloneSetup(historialController).build();
@@ -95,6 +95,7 @@ public class HistorialClinicoControllerTest {
 
         // WHEN / THEN
         mockMvc.perform(post("/historial")
+                        .header("Authorization", "Bearer token-test")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().is2xxSuccessful())
@@ -110,6 +111,7 @@ public class HistorialClinicoControllerTest {
         
         // WHEN / THEN
         mockMvc.perform(put("/historial/1")
+                        .header("Authorization", "Bearer token-test") 
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())

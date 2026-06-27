@@ -24,7 +24,7 @@ public class DataLoader implements CommandLineRunner {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             HistorialClinico h = new HistorialClinico();
-            h.setIdCliente((long) random.nextInt(2) + 1);
+            h.setIdUsuario((long) random.nextInt(2) + 1);
             h.setFecha(new Date());
             h.setDiagnostico(faker.options().option(
             "Hipertension arterial", "Diabetes tipo 2", "Lumbalgia cronica",

@@ -31,7 +31,7 @@ public class HistorialController {
     public ResponseEntity<HistorialClinicoDTO> crear(
             @Valid @RequestBody HistorialClinicoDTO dto,
             @RequestHeader("Authorization") String token) {
-        logger.info("POST /historial - idCliente={}", dto.getIdCliente());
+        logger.info("POST /historial - idUsuario={}", dto.getIdUsuario());
         HistorialClinico nuevo = historialService.guardar(dto.toModel(), token);
         return ResponseEntity.ok(HistorialClinicoDTO.fromModel(nuevo));
 }
@@ -52,10 +52,10 @@ public class HistorialController {
         return ResponseEntity.ok(HistorialClinicoDTO.fromModel(historialService.obtenerPorId(id)));
     }
 
-    @GetMapping("/cliente/{idCliente}")
-    @Operation(summary = "Listar historial por cliente")
-    public ResponseEntity<List<HistorialClinicoDTO>> listarPorCliente(@PathVariable Long idCliente) {
-        List<HistorialClinicoDTO> dtos = historialService.listarPorCliente(idCliente).stream()
+    @GetMapping("/usuario/{idUsuario}")
+    @Operation(summary = "Listar historial por usuario")
+    public ResponseEntity<List<HistorialClinicoDTO>> listarPorUsuario(@PathVariable Long idUsuario) {
+        List<HistorialClinicoDTO> dtos = historialService.listarPorUsuario(idUsuario).stream()
                 .map(HistorialClinicoDTO::fromModel).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
