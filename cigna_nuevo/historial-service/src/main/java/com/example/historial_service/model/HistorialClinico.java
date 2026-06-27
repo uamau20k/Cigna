@@ -19,9 +19,9 @@ public class HistorialClinico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El ID del cliente es obligatorio")
+    @NotNull(message = "El ID del usuario es obligatorio")
     @Column(nullable = false)
-    private Long idCliente;
+    private Long idUsuario;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)

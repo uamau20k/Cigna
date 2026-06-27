@@ -17,8 +17,8 @@ public class HistorialClinicoDTO {
 
     private Long id;
 
-    @NotNull(message = "El ID del cliente es obligatorio")
-    private Long idCliente;
+    @NotNull(message = "El ID del usuario es obligatorio")
+    private Long idUsuario;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date fecha;
@@ -32,11 +32,11 @@ public class HistorialClinicoDTO {
     private String tratamiento;
 
     public HistorialClinico toModel() {
-        return new HistorialClinico(id, idCliente, fecha, diagnostico, tratamiento);
+        return new HistorialClinico(id, idUsuario, fecha, diagnostico, tratamiento);
     }
 
     public static HistorialClinicoDTO fromModel(HistorialClinico h) {
-        return new HistorialClinicoDTO(h.getId(), h.getIdCliente(), h.getFecha(),
+        return new HistorialClinicoDTO(h.getId(), h.getIdUsuario(), h.getFecha(),
                 h.getDiagnostico(), h.getTratamiento());
     }
 }
