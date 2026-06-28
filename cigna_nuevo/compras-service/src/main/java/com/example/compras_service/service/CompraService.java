@@ -112,6 +112,7 @@ public class CompraService {
                 throw new IllegalArgumentException("estado requerido");
             if (compra.getFechaCompra() == null) compra.setFechaCompra(new Date());
 
+            logger.info("TOKEN RECIBIDO = [{}]", token);
             logger.info("Validando existencia de usuario idUsuario={}", compra.getIdUsuario());
             Boolean existeUsuario = webClient.get()
                     .uri(String.format(usuarioPath, compra.getIdUsuario()))
@@ -128,6 +129,7 @@ public class CompraService {
             logger.info("Validando existencia de servicio idServicio={}", compra.getIdServicio());
             Boolean existeServicio = webClient.get()
                     .uri(String.format(servicioPath, compra.getIdServicio()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
