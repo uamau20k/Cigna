@@ -1,4 +1,4 @@
-package com.example.tratamientos_service.config;
+package com.cigna.tratamientos_service.config;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

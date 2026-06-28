@@ -1,12 +1,9 @@
-package com.example.tratamientos_service.service;
+package com.cigna.tratamientos_service.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.example.tratamientos_service.exception.ResourceNotFoundException;
-import com.example.tratamientos_service.model.Tratamiento;
-import com.example.tratamientos_service.repository.TratamientoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.cigna.tratamientos_service.exception.ResourceNotFoundException;
+import com.cigna.tratamientos_service.model.Tratamiento;
+import com.cigna.tratamientos_service.repository.TratamientoRepository;
+import com.cigna.tratamientos_service.service.TratamientoService;
 
 import java.util.List;
 import java.util.Optional;

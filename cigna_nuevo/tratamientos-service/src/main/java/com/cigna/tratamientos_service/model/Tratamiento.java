@@ -1,4 +1,4 @@
-package com.example.tratamientos_service.model;
+package com.cigna.tratamientos_service.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

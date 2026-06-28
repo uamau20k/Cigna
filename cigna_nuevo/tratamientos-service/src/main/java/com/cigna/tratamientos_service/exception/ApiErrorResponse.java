@@ -1,4 +1,4 @@
-package com.example.tratamientos_service.exception;
+package com.cigna.tratamientos_service.exception;
 import lombok.Builder;
 import lombok.Data;
 import java.time.OffsetDateTime;

@@ -1,8 +1,5 @@
-package com.example.tratamientos_service.controller;
+package com.cigna.tratamientos_service.controller;
 
-import com.example.tratamientos_service.dto.TratamientoDTO;
-import com.example.tratamientos_service.model.Tratamiento;
-import com.example.tratamientos_service.service.TratamientoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.cigna.tratamientos_service.dto.TratamientoDTO;
+import com.cigna.tratamientos_service.model.Tratamiento;
+import com.cigna.tratamientos_service.service.TratamientoService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,15 +115,15 @@ public class TratamientoController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar tratamiento", description = "Elimina un tratamiento médico del catálogo.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Tratamiento eliminado exitosamente"),
+        @ApiResponse(responseCode = "200", description = "Tratamiento eliminado exitosamente"),
         @ApiResponse(responseCode = "404", description = "Tratamiento no encontrado", content = @Content)
-    })
-    public ResponseEntity<Void> eliminar(
+})
+    public ResponseEntity<String> eliminar(
             @Parameter(description = "ID del tratamiento a eliminar", example = "1")
             @PathVariable Long id) {
         logger.info("DELETE /tratamientos/{} - Solicitud para eliminar tratamiento", id);
         tratamientoService.eliminar(id);
         logger.debug("Tratamiento ID {} eliminado exitosamente", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Tratamiento eliminado exitosamente");
     }
 }

@@ -1,11 +1,13 @@
-package com.example.tratamientos_service.service;
+package com.cigna.tratamientos_service.service;
 
-import com.example.tratamientos_service.exception.ResourceNotFoundException;
-import com.example.tratamientos_service.model.Tratamiento;
-import com.example.tratamientos_service.repository.TratamientoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.cigna.tratamientos_service.exception.ResourceNotFoundException;
+import com.cigna.tratamientos_service.model.Tratamiento;
+import com.cigna.tratamientos_service.repository.TratamientoRepository;
+
 import java.util.List;
 
 @Service

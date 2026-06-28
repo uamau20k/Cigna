@@ -1,8 +1,5 @@
-package com.example.tratamientos_service.controller;
+package com.cigna.tratamientos_service.controller;
 
-import com.example.tratamientos_service.assemblers.TratamientoModelAssembler;
-import com.example.tratamientos_service.model.Tratamiento;
-import com.example.tratamientos_service.service.TratamientoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -10,6 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+
+import com.cigna.tratamientos_service.assemblers.TratamientoModelAssembler;
+import com.cigna.tratamientos_service.model.Tratamiento;
+import com.cigna.tratamientos_service.service.TratamientoService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;

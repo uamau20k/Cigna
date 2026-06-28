@@ -1,6 +1,7 @@
-package com.example.tratamientos_service.dto;
+package com.cigna.tratamientos_service.dto;
 
-import com.example.tratamientos_service.model.Tratamiento;
+import com.cigna.tratamientos_service.model.Tratamiento;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
