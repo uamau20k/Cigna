@@ -19,7 +19,7 @@ server:
 
 api:
   base-url: http://api-gateway:9090
-  paciente:
+  usuario:
     exists: /usuarios/%d/exists
   servicio:
     exists: /servicios/%d/exists

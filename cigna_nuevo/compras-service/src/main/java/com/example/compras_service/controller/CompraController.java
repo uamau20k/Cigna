@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
@@ -31,11 +32,13 @@ public class CompraController {
     }
 
     @PostMapping
-    public ResponseEntity<CompraDTO> crearCompra(@Valid @RequestBody CompraDTO compraDto) {
+    public ResponseEntity<CompraDTO> crearCompra(
+        @Valid @RequestBody CompraDTO compraDto, 
+        @RequestHeader("Authorization") String token) {
         try {
-            logger.info("POST /compras - Creando compra: idPaciente={}, idServicio={}",
-                    compraDto.getIdPaciente(), compraDto.getIdServicio());
-            Compra nuevaCompra = compraService.guardar(compraDto.toModel());
+            logger.info("POST /compras - Creando compra: idUsuario={}, idServicio={}",
+                    compraDto.getIdUsuario(), compraDto.getIdServicio());
+            Compra nuevaCompra = compraService.guardar(compraDto.toModel(), token);
             logger.info("Compra creada exitosamente id={}", nuevaCompra.getId());
             return ResponseEntity.ok(CompraDTO.fromModel(nuevaCompra));
         } catch (Exception e) {
@@ -73,10 +76,13 @@ public class CompraController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompraDTO> actualizarCompra(@PathVariable Long id, @Valid @RequestBody CompraDTO compraDto) {
+    public ResponseEntity<CompraDTO> actualizarCompra(
+        @PathVariable Long id, 
+        @Valid @RequestBody CompraDTO compraDto,
+        @RequestHeader ("Authorization") String token) {
         logger.info("PUT /compras/{} - Actualizando compra", id);
         try {
-            Compra actualizado = compraService.actualizar(id, compraDto.toModel());
+            Compra actualizado = compraService.actualizar(id, compraDto.toModel(), token);
             logger.info("Compra actualizada exitosamente id={}", id);
             return ResponseEntity.ok(CompraDTO.fromModel(actualizado));
         } catch (Exception e) {
