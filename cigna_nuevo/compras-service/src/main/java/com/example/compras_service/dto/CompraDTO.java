@@ -17,8 +17,8 @@ public class CompraDTO {
 
     private Long id;
 
-    @NotNull(message = "El ID del paciente es obligatorio")
-    private Long idPaciente;
+    @NotNull(message = "El ID del usuario es obligatorio")
+    private Long idUsuario;
 
     @NotNull(message = "El ID del servicio es obligatorio")
     private Long idServicio;
@@ -32,13 +32,13 @@ public class CompraDTO {
     private String descripcion;
 
     public Compra toModel() {
-        return new Compra(id, idPaciente, idServicio, fechaCompra, estado, descripcion);
+        return new Compra(id, idUsuario, idServicio, fechaCompra, estado, descripcion);
     }
 
     public static CompraDTO fromModel(Compra compra) {
         return new CompraDTO(
                 compra.getId(),
-                compra.getIdPaciente(),
+                compra.getIdUsuario(),
                 compra.getIdServicio(),
                 compra.getFechaCompra(),
                 compra.getEstado(),

@@ -39,16 +39,16 @@ class CompraServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         compraService = new CompraService(compraRepository, webClient);
-        Field pacienteField = CompraService.class.getDeclaredField("pacientePath");
-        pacienteField.setAccessible(true);
-        pacienteField.set(compraService, "http://api/usuarios/%d/exists");
+        Field usuarioField = CompraService.class.getDeclaredField("usuarioPath");
+        usuarioField.setAccessible(true);
+        usuarioField.set(compraService, "http://api/usuarios/%d/exists");
 
         Field servicioField = CompraService.class.getDeclaredField("servicioPath");
         servicioField.setAccessible(true);
         servicioField.set(compraService, "http://api/servicios/%d/exists");
     }
 
-    private void mockPacienteYServicioExistentes() {
+    private void mockUsuarioYServicioExistentes() {
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
@@ -57,12 +57,12 @@ class CompraServiceTest {
 
     @Test
     void testGuardar() {
-        mockPacienteYServicioExistentes();
+        mockUsuarioYServicioExistentes();
         Compra compra = new Compra(null, 1L, 1L, new Date(), "PENDIENTE", "Consulta médica");
         when(compraRepository.save(any(Compra.class))).thenReturn(
                 new Compra(1L, 1L, 1L, new Date(), "PENDIENTE", "Consulta médica"));
 
-        Compra resultado = compraService.guardar(compra);
+        Compra resultado = compraService.guardar(compra, "Bearer test-token");
 
         assertNotNull(resultado);
         assertEquals("PENDIENTE", resultado.getEstado());
@@ -104,7 +104,7 @@ class CompraServiceTest {
 
     @Test
     void testActualizar() {
-        mockPacienteYServicioExistentes();
+        mockUsuarioYServicioExistentes();
         Long id = 1L;
         Compra existente = new Compra(id, 1L, 1L, new Date(), "PENDIENTE", "Original");
         when(compraRepository.findById(id)).thenReturn(Optional.of(existente));
@@ -113,11 +113,11 @@ class CompraServiceTest {
         Compra guardado = new Compra(id, 2L, 3L, cambios.getFechaCompra(), "PAGADO", "Actualizado");
         when(compraRepository.save(any(Compra.class))).thenReturn(guardado);
 
-        Compra resultado = compraService.actualizar(id, cambios);
+        Compra resultado = compraService.actualizar(id, cambios, "Bearer test-token");
 
         assertNotNull(resultado);
         assertEquals("PAGADO", resultado.getEstado());
-        assertEquals(2L, resultado.getIdPaciente());
+        assertEquals(2L, resultado.getIdUsuario());
         verify(compraRepository).findById(id);
         verify(compraRepository).save(any(Compra.class));
     }

@@ -25,9 +25,9 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "El ID del paciente es obligatorio")
+    @NotNull(message = "El ID del usuario es obligatorio")
     @Column(nullable = false)
-    private Long idPaciente;
+    private Long idUsuario;
 
     @NotNull(message = "El ID del servicio es obligatorio")
     @Column(nullable = false)
