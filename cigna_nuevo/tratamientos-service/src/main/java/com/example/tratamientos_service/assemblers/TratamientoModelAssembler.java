@@ -1,11 +1,13 @@
 package com.example.tratamientos_service.assemblers;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-import com.example.tratamientos_service.controller.TratamientoControllerV2;
-import com.example.tratamientos_service.model.Tratamiento;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
+
+import com.example.tratamientos_service.controller.TratamientoControllerV2;
+import com.example.tratamientos_service.model.Tratamiento;
 
 @Component
 public class TratamientoModelAssembler implements RepresentationModelAssembler<Tratamiento, EntityModel<Tratamiento>> {
