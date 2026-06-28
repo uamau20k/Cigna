@@ -1,11 +1,11 @@
-package com.cigna.tratamientos_service;
+package com.example.tratamientos_service;
 
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.cigna.tratamientos_service.model.Tratamiento;
-import com.cigna.tratamientos_service.repository.TratamientoRepository;
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.repository.TratamientoRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {

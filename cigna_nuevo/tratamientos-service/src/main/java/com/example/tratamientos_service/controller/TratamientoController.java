@@ -1,4 +1,4 @@
-package com.cigna.tratamientos_service.controller;
+package com.example.tratamientos_service.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,9 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.cigna.tratamientos_service.dto.TratamientoDTO;
-import com.cigna.tratamientos_service.model.Tratamiento;
-import com.cigna.tratamientos_service.service.TratamientoService;
+import com.example.tratamientos_service.dto.TratamientoDTO;
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.service.TratamientoService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -123,7 +123,7 @@ public class TratamientoController {
             @PathVariable Long id) {
         logger.info("DELETE /tratamientos/{} - Solicitud para eliminar tratamiento", id);
         tratamientoService.eliminar(id);
-        logger.debug("Tratamiento ID {} eliminado exitosamente", id);
-        return ResponseEntity.ok("Tratamiento eliminado exitosamente");
+        logger.debug("Tratamiento ID {} eliminado exitosamente", id); 
+        return ResponseEntity.ok("Tratamiento eliminado exitosamente"); // se implemento un mensaje de confirmacion para la eliminacion
     }
 }

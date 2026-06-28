@@ -1,4 +1,4 @@
-package com.cigna.tratamientos_service.controller;
+package com.example.tratamientos_service.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,9 +8,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
-import com.cigna.tratamientos_service.assemblers.TratamientoModelAssembler;
-import com.cigna.tratamientos_service.model.Tratamiento;
-import com.cigna.tratamientos_service.service.TratamientoService;
+import com.example.tratamientos_service.assemblers.TratamientoModelAssembler;
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.service.TratamientoService;
 
 import java.util.List;
 import java.util.stream.Collectors;

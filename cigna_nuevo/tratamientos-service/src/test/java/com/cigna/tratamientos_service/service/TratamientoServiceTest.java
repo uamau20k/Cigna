@@ -12,10 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.cigna.tratamientos_service.exception.ResourceNotFoundException;
-import com.cigna.tratamientos_service.model.Tratamiento;
-import com.cigna.tratamientos_service.repository.TratamientoRepository;
-import com.cigna.tratamientos_service.service.TratamientoService;
+import com.example.tratamientos_service.exception.ResourceNotFoundException;
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.repository.TratamientoRepository;
+import com.example.tratamientos_service.service.TratamientoService;
 
 import java.util.List;
 import java.util.Optional;

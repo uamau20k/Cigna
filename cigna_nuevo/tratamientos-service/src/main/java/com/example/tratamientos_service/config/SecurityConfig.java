@@ -1,4 +1,4 @@
-package com.cigna.tratamientos_service.config;
+package com.example.tratamientos_service.config;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;

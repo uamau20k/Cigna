@@ -1,4 +1,4 @@
-package com.cigna.tratamientos_service.exception;
+package com.example.tratamientos_service.exception;
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) { super(message); }
 }

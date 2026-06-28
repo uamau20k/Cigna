@@ -5,10 +5,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.cigna.tratamientos_service.controller.TratamientoController;
-import com.cigna.tratamientos_service.dto.TratamientoDTO;
-import com.cigna.tratamientos_service.model.Tratamiento;
-import com.cigna.tratamientos_service.service.TratamientoService;
+import com.example.tratamientos_service.controller.TratamientoController;
+import com.example.tratamientos_service.dto.TratamientoDTO;
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.service.TratamientoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
