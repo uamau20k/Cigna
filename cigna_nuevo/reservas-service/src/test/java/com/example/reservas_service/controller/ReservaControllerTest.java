@@ -47,7 +47,7 @@ public class ReservaControllerTest {
         mockMvc.perform(get("/reservas"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].idCliente").value(1L))
+                .andExpect(jsonPath("$[0].idUsuario").value(1L))
                 .andExpect(jsonPath("$[0].descripcion").value("Reserva laptop"))
                 .andExpect(jsonPath("$[0].estado").value("PENDIENTE"));
     }
@@ -59,6 +59,8 @@ public class ReservaControllerTest {
         mockMvc.perform(get("/reservas/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.idUsuario").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
@@ -72,6 +74,8 @@ public class ReservaControllerTest {
                         .content(objectMapper.writeValueAsString(reservaDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.idUsuario").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
@@ -84,7 +88,10 @@ public class ReservaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reservaDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.idUsuario").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
+                .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
     @Test
