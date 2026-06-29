@@ -21,11 +21,16 @@ public class ReservaDTO {
     @NotNull(message = "El ID del usuario es obligatorio")
     private Long idUsuario;
 
+    @NotNull(message = "El ID del servicio es obligatorio")
+    private Long idServicio;
+
+    @NotNull(message = "El ID del tratamiento es obligatorio")
+    private Long idTratamiento;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date fechaReserva;
 
-    @NotBlank(message = "La descripcion es obligatoria")
-    @Size(min = 5, max = 255, message = "La descripcion debe tener entre 5 y 255 caracteres")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String descripcion;
 
     @NotBlank(message = "El estado es obligatorio")
@@ -36,11 +41,11 @@ public class ReservaDTO {
     private String estado;
 
     public Reserva toModel() {
-        return new Reserva(id, idUsuario, fechaReserva, descripcion, estado);
+        return new Reserva(id, idUsuario, idServicio, idTratamiento, fechaReserva, descripcion, estado);
     }
 
     public static ReservaDTO fromModel(Reserva r) {
-        return new ReservaDTO(r.getId(), r.getIdUsuario(), r.getFechaReserva(),
+        return new ReservaDTO(r.getId(), r.getIdUsuario(), r.getIdServicio(), r.getIdTratamiento(), r.getFechaReserva(),
                 r.getDescripcion(), r.getEstado());
     }
 }

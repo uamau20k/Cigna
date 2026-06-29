@@ -38,9 +38,18 @@ class ReservaServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         reservaService = new ReservaService(reservaRepository, webClient);
-        Field field = ReservaService.class.getDeclaredField("clientePath");
+        Field field = ReservaService.class.getDeclaredField("usuarioPath");
         field.setAccessible(true);
-        field.set(reservaService, "http://api/clientes/%d/exists");
+        field.set(reservaService, "http://api/usuarios/%d/exists");
+        Field fieldServicio = ReservaService.class.getDeclaredField("servicioPath");
+        fieldServicio.setAccessible(true);
+        fieldServicio.set(reservaService, "http://api/servicios/%d/nombre");
+        Field fieldTratamiento = ReservaService.class.getDeclaredField("tratamientoPath");
+        fieldTratamiento.setAccessible(true);
+        fieldTratamiento.set(reservaService, "http://api/tratamientos/%d/exists");
+        Field fieldServicioExists = ReservaService.class.getDeclaredField("servicioExistsPath");
+        fieldServicioExists.setAccessible(true);
+        fieldServicioExists.set(reservaService, "http://api/servicios/%d/exists");
     }
 
     private void mockClienteExistente() {
@@ -51,14 +60,23 @@ class ReservaServiceTest {
         when(responseSpec.bodyToMono(Boolean.class)).thenReturn(Mono.just(Boolean.TRUE));
     }
 
+    private void mockServicioNombre() { // se agrego este metodo 
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono(Boolean.class)).thenReturn(Mono.just(Boolean.TRUE));
+        when(responseSpec.bodyToMono(String.class)).thenReturn(Mono.just("Consulta General"));
+    }
+
     // ─── CRUD Tests ────────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Guardar reserva con cliente valido")
     void testGuardar() {
         mockClienteExistente();
-        Reserva reserva = new Reserva(null, 1L, null, "Test reserva", "PENDIENTE");
-        Reserva guardada = new Reserva(1L, 1L, new Date(), "Test reserva", "PENDIENTE");
+        Reserva reserva = new Reserva(null, 1L, null, null, null, "Test reserva", "PENDIENTE");
+        Reserva guardada = new Reserva(1L, 1L, null, null, new Date(), "Test reserva", "PENDIENTE");
         // GIVEN
 
         when(reservaRepository.save(any(Reserva.class))).thenReturn(guardada);
@@ -77,7 +95,7 @@ class ReservaServiceTest {
     @Test
     @DisplayName("Listar retorna todas las reservas")
     void testListar() {
-        Reserva r = new Reserva(1L, 1L, new Date(), "Test", "PENDIENTE");
+        Reserva r = new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "PENDIENTE");
         // GIVEN
 
         when(reservaRepository.findAll()).thenReturn(List.of(r));
@@ -92,7 +110,7 @@ class ReservaServiceTest {
     @Test
     @DisplayName("ObtenerPorId retorna reserva existente")
     void testObtenerPorId() {
-        Reserva r = new Reserva(1L, 1L, new Date(), "Test", "PENDIENTE");
+        Reserva r = new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "PENDIENTE");
         // GIVEN
 
         when(reservaRepository.findById(1L)).thenReturn(Optional.of(r));
@@ -116,14 +134,14 @@ class ReservaServiceTest {
     @Test
     @DisplayName("Actualizar modifica reserva existente")
     void testActualizar() {
-        mockClienteExistente();
-        Reserva existente = new Reserva(1L, 1L, new Date(), "Original", "PENDIENTE");
+        mockServicioNombre();
+        Reserva existente = new Reserva(1L, 1L, 1L, 1L, new Date(), "Original", "PENDIENTE");
         // GIVEN
 
         when(reservaRepository.findById(1L)).thenReturn(Optional.of(existente));
 
-        Reserva cambios = new Reserva(1L, 1L, new Date(), "Actualizada", "CONFIRMADA");
-        Reserva guardada = new Reserva(1L, 1L, new Date(), "Actualizada", "CONFIRMADA");
+        Reserva cambios = new Reserva(1L, 1L, 1L, 1L, new Date(), "Actualizada", "CONFIRMADA");
+        Reserva guardada = new Reserva(1L, 1L, 1L, 1L, new Date(), "Actualizada", "CONFIRMADA");
         // GIVEN
 
         when(reservaRepository.save(any())).thenReturn(guardada);
@@ -182,9 +200,9 @@ class ReservaServiceTest {
     @DisplayName("Negocio: solo reservas PENDIENTE pueden cancelarse")
     void testNegocio_PuedeCancelarse() {
         // Given
-        Reserva pendiente  = new Reserva(1L, 1L, new Date(), "Test", "PENDIENTE");
-        Reserva confirmada = new Reserva(2L, 1L, new Date(), "Test", "CONFIRMADA");
-        Reserva cancelada  = new Reserva(3L, 1L, new Date(), "Test", "CANCELADA");
+        Reserva pendiente  = new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "PENDIENTE");
+        Reserva confirmada = new Reserva(2L, 1L, 1L, 1L, new Date(), "Test", "CONFIRMADA");
+        Reserva cancelada  = new Reserva(3L, 1L, 1L, 1L, new Date(), "Test", "CANCELADA");
 
         // When & Then
         assertTrue(reservaService.puedeCancelarse(pendiente),
@@ -218,14 +236,14 @@ class ReservaServiceTest {
     @Test
     @DisplayName("Negocio: cancelar reserva PENDIENTE cambia estado a CANCELADA")
     void testNegocio_CancelarReservaPendiente() {
-        Reserva pendiente = new Reserva(1L, 1L, new Date(), "Test", "PENDIENTE");
+        Reserva pendiente = new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "PENDIENTE");
         // GIVEN
 
         when(reservaRepository.findById(1L)).thenReturn(Optional.of(pendiente));
         // GIVEN
 
         when(reservaRepository.save(any())).thenReturn(
-                new Reserva(1L, 1L, new Date(), "Test", "CANCELADA"));
+                new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "CANCELADA"));
 
         reservaService.cancelar(1L);
 
@@ -235,11 +253,28 @@ class ReservaServiceTest {
     @Test
     @DisplayName("Negocio: cancelar reserva CONFIRMADA lanza excepcion")
     void testNegocio_CancelarReservaConfirmadaLanzaExcepcion() {
-        Reserva confirmada = new Reserva(1L, 1L, new Date(), "Test", "CONFIRMADA");
+        Reserva confirmada = new Reserva(1L, 1L, 1L, 1L, new Date(), "Test", "CONFIRMADA");
         // GIVEN
 
         when(reservaRepository.findById(1L)).thenReturn(Optional.of(confirmada));
 
         assertThrows(BadRequestException.class, () -> reservaService.cancelar(1L));
+    }
+
+    @Test // y el respecitivo test 
+    @DisplayName("Guardar reserva con idServicio asigna descripcion desde el servicio")
+    void testGuardar_ConIdServicio_AsignaDescripcion() {
+        mockServicioNombre();
+
+        Reserva reserva = new Reserva(null, 1L, 1L, 1L, null, null, "PENDIENTE");
+        Reserva guardada = new Reserva(1L, 1L, 1L, 1L, new Date(), "Consulta General", "PENDIENTE");
+
+        when(reservaRepository.save(any(Reserva.class))).thenReturn(guardada);
+
+        Reserva resultado = reservaService.guardar(reserva, "Bearer token");
+
+        assertNotNull(resultado);
+        assertEquals("Consulta General", resultado.getDescripcion());
+        verify(reservaRepository).save(any(Reserva.class));
     }
 }

@@ -25,6 +25,8 @@ public class DataLoader implements CommandLineRunner {
         for (int i = 0; i < 5; i++) {
             Reserva reserva = new Reserva();
             reserva.setIdUsuario((long) random.nextInt(2) + 1);
+            reserva.setIdServicio((long) random.nextInt(2) + 1);
+            reserva.setIdTratamiento((long) random.nextInt(2) + 1);
             reserva.setFechaReserva(new Date());
             reserva.setDescripcion(faker.commerce().productName());
             reserva.setEstado(faker.options().option("PENDIENTE", "CONFIRMADA", "CANCELADA"));

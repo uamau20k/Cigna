@@ -1,5 +1,8 @@
 package com.example.reservas_service.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -34,8 +37,8 @@ public class ReservaControllerTest {
 
     @BeforeEach
     void setUp() {
-        reserva = new Reserva(1L, 1L, new Date(), "Reserva laptop", "PENDIENTE");
-        reservaDto = new ReservaDTO(null, 1L, null, "Reserva laptop", "PENDIENTE");
+        reserva = new Reserva(1L, 1L, 1L, 1L, new Date(), "Consulta General", "PENDIENTE");
+        reservaDto = new ReservaDTO(null, 1L, 1L, 1L, null, null, "PENDIENTE");
         ReservaController controller = new ReservaController(reservaService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -48,7 +51,9 @@ public class ReservaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].idUsuario").value(1L))
-                .andExpect(jsonPath("$[0].descripcion").value("Reserva laptop"))
+                .andExpect(jsonPath("$[0].idServicio").value(1L))
+                .andExpect(jsonPath("$[0].idTratamiento").value(1L))
+                .andExpect(jsonPath("$[0].descripcion").value("Consulta General"))
                 .andExpect(jsonPath("$[0].estado").value("PENDIENTE"));
     }
 
@@ -60,7 +65,9 @@ public class ReservaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.idUsuario").value(1L))
-                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
+                .andExpect(jsonPath("$.idServicio").value(1L))
+                .andExpect(jsonPath("$.idTratamiento").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Consulta General"))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
@@ -75,7 +82,9 @@ public class ReservaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.idUsuario").value(1L))
-                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
+                .andExpect(jsonPath("$.idServicio").value(1L))
+                .andExpect(jsonPath("$.idTratamiento").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Consulta General"))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
@@ -90,7 +99,9 @@ public class ReservaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.idUsuario").value(1L))
-                .andExpect(jsonPath("$.descripcion").value("Reserva laptop"))
+                .andExpect(jsonPath("$.idServicio").value(1L))
+                .andExpect(jsonPath("$.idTratamiento").value(1L))
+                .andExpect(jsonPath("$.descripcion").value("Consulta General"))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
