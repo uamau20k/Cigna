@@ -28,7 +28,8 @@ public class DataLoader implements CommandLineRunner {
             reserva.setIdServicio((long) random.nextInt(2) + 1);
             reserva.setIdTratamiento((long) random.nextInt(2) + 1);
             reserva.setFechaReserva(new Date());
-            reserva.setDescripcion(faker.commerce().productName());
+            String[] descripciones = {"Consulta General", "Cardiologia", "Fisioterapia"};
+            reserva.setDescripcion(descripciones[random.nextInt(descripciones.length)]);
             reserva.setEstado(faker.options().option("PENDIENTE", "CONFIRMADA", "CANCELADA"));
             reservaRepository.save(reserva);
         }
