@@ -1,11 +1,7 @@
-🏥 Cigna Project
-
 <div align="center">
-
-Sistema de Gestión Clínica basado en Microservicios
-
-Arquitectura distribuida desarrollada con Spring Boot, Spring Cloud y Java 21, enfocada en la administración integral de procesos clínicos mediante servicios desacoplados.
-
+🏥 CIGNA PROJECT
+Sistema de Gestión Clínica basado en Arquitectura de Microservicios
+<p>
 
 
 
@@ -14,70 +10,82 @@ Arquitectura distribuida desarrollada con Spring Boot, Spring Cloud y Java 21, e
 
 
 
+
+
+
+
+</p>
+
+"Una plataforma distribuida para la gestión integral de procesos clínicos, desarrollada con tecnologías modernas del ecosistema Spring."
 
 </div>
-
-📖 Descripción
-
-Cigna Project es una plataforma desarrollada bajo una arquitectura de microservicios que simula el funcionamiento de un sistema clínico moderno.
-
-Cada dominio de negocio se implementa como un servicio independiente, lo que permite un desarrollo desacoplado, una mayor escalabilidad y una mejor mantenibilidad del sistema.
-
-La plataforma incorpora autenticación mediante JWT, descubrimiento de servicios con Eureka, un API Gateway como punto de entrada único, documentación con Swagger/OpenAPI y persistencia independiente para cada microservicio.
-
+✨ Características
+<table> <tr> <td width="50%">
+🔐 Seguridad
+JWT Authentication
+Spring Security
+Roles y permisos
+Endpoints protegidos
+</td> <td width="50%">
+☁️ Microservicios
+API Gateway
+Eureka Discovery
+Spring Cloud
+Comunicación REST
+</td> </tr> <tr> <td>
+🗄 Persistencia
+MySQL
+Liquibase
+Bases independientes
+JPA / Hibernate
+</td> <td>
+🚀 DevOps
+Docker
+Maven
+Swagger
+Railway / Render
+</td> </tr> </table>
 🏗 Arquitectura
-graph TD
-
-Cliente --> API_Gateway
-
-API_Gateway --> Auth
-API_Gateway --> Usuarios
-API_Gateway --> Servicios
-API_Gateway --> Tratamientos
-API_Gateway --> Agendas
-API_Gateway --> Reservas
-API_Gateway --> Compras
-API_Gateway --> Pagos
-API_Gateway --> Historial
-API_Gateway --> Sucursales
-API_Gateway --> Notificaciones
-
-Reservas --> Usuarios
-Reservas --> Agendas
-Compras --> Pagos
-Compras --> Servicios
-Historial --> Usuarios
-Historial --> Tratamientos
-Notificaciones --> Usuarios
-📦 Microservicios
-Servicio	Responsabilidad
-🔐 Auth Service	Autenticación y autorización mediante JWT.
-👤 Usuario Service	Gestión de usuarios del sistema.
-🩺 Servicio Service	Administración de servicios clínicos.
-💊 Tratamiento Service	Gestión de tratamientos médicos.
-📅 Agenda Service	Administración de agendas y disponibilidad.
-📋 Reserva Service	Gestión de reservas de atención.
-🛒 Compra Service	Registro de compras realizadas por los usuarios.
-💳 Pago Service	Procesamiento de pagos asociados a compras.
-📖 Historial Service	Administración del historial clínico.
-🏥 Sucursal Service	Gestión de sucursales y sedes.
-🔔 Notificación Service	Envío de notificaciones a los usuarios.
-🚀 Características
-Arquitectura basada en microservicios.
-API Gateway como punto único de acceso.
-Eureka Discovery Server.
-Seguridad mediante JWT.
-Swagger/OpenAPI en todos los servicios.
-Comunicación REST entre microservicios.
-Migraciones automáticas con Liquibase.
-Bases de datos independientes por servicio.
-Contenedorización mediante Docker.
-Preparado para despliegue en Railway o Render.
-📁 Organización del repositorio
+                   👨‍⚕️ Cliente
+                        │
+                 🌐 API Gateway
+                        │
+        ─────────────────────────────────
+        │              │               │
+     🔐 Auth      👤 Usuarios     🩺 Servicios
+        │              │               │
+     📅 Agenda     📋 Reservas     💊 Tratamientos
+        │              │               │
+      💳 Pagos      🛒 Compras     📖 Historial
+                        │
+                  🔔 Notificaciones
+                        │
+                  🏥 Sucursales
+🧩 Ecosistema de Microservicios
+🚀 Servicio	📌 Responsabilidad
+🔐 Auth	Autenticación mediante JWT
+👤 Usuarios	Gestión de usuarios
+🩺 Servicios	Servicios clínicos
+💊 Tratamientos	Tratamientos médicos
+📅 Agendas	Agenda médica
+📋 Reservas	Reservas de atención
+🛒 Compras	Compras del sistema
+💳 Pagos	Gestión de pagos
+📖 Historial	Historial clínico
+🏥 Sucursales	Administración de sucursales
+🔔 Notificaciones	Envío de notificaciones
+⚙️ Stack Tecnológico
+<div align="center">
+Backend	Cloud	Seguridad	Persistencia	DevOps
+☕ Java 21	☁️ Spring Cloud	🔐 JWT	🐬 MySQL	🐳 Docker
+🌱 Spring Boot	🌐 Eureka	Spring Security	Liquibase	Maven
+</div>
+📂 Organización
 cigna/
 │
 ├── discovery-server/
 ├── api-gateway/
+│
 ├── auth-service/
 ├── usuario-service/
 ├── servicio-service/
@@ -88,49 +96,47 @@ cigna/
 ├── historial-service/
 ├── tratamiento-service/
 ├── sucursal-service/
-├── notificacion-service/
-│
-└── docs/
+└── notificacion-service/
+📸 Capturas
+<table> <tr> <td align="center">
+Eureka
+
+📷
+
+</td> <td align="center">
+Swagger
+
+📷
+
+</td> </tr> <tr> <td align="center">
+Docker
+
+📷
+
+</td> <td align="center">
+Postman
+
+📷
+
+</td> </tr> </table>
 📚 Documentación
 
-Cada microservicio posee su propia documentación técnica, donde encontrarás:
+Cada microservicio cuenta con su propio README, donde encontrarás:
 
-Descripción del servicio
-Responsabilidades
-Comunicación con otros servicios
-Endpoints REST
-Swagger UI
-Variables de entorno
-Ejecución local
-Docker
-Despliegue
-Tests y cobertura
+✔ Descripción
+✔ Responsabilidad
+✔ Comunicación entre servicios
+✔ Endpoints
+✔ Swagger
+✔ Variables de entorno
+✔ Docker
+✔ Despliegue
+✔ Tests
+<div align="center">
+⭐ Arquitectura Moderna ⭐
 
-Esto permite mantener una documentación modular y sencilla de mantener.
+Spring Boot • Spring Cloud • Docker • JWT • MySQL • Liquibase
 
-🔒 Seguridad
+💙 Gracias por visitar Cigna Project
 
-El sistema utiliza autenticación basada en JSON Web Token (JWT).
-
-El flujo de autenticación es:
-
-El usuario inicia sesión mediante Auth Service.
-Se genera un token JWT.
-El cliente envía el token en cada petición.
-Los microservicios validan el token antes de procesar la solicitud.
-📸 Próximamente
-
-Se incorporarán imágenes de:
-
-Dashboard de Eureka
-Swagger UI
-Docker Compose
-Arquitectura del sistema
-Colección Postman
-👨‍💻 Equipo
-
-Proyecto desarrollado como parte de una solución académica para la implementación de una arquitectura de microservicios utilizando el ecosistema Spring.
-
-📄 Licencia
-
-Proyecto desarrollado con fines académicos.
+</div>
