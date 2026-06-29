@@ -1,151 +1,136 @@
-# 🏥 Cigna Project
+🏥 Cigna Project
 
-<p align="center">
+<div align="center">
 
-# Sistema de Gestión Clínica basado en Microservicios
+Sistema de Gestión Clínica basado en Microservicios
 
-Arquitectura distribuida desarrollada con **Java 21** y **Spring Boot**, orientada a la administración de usuarios, servicios médicos, agendas, reservas y tratamientos.
+Arquitectura distribuida desarrollada con Spring Boot, Spring Cloud y Java 21, enfocada en la administración integral de procesos clínicos mediante servicios desacoplados.
 
-</p>
 
----
 
-## 🚀 Tecnologías utilizadas
 
-<p align="center">
 
-![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge\&logo=openjdk\&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge\&logo=springboot\&logoColor=white)
-![Spring Cloud](https://img.shields.io/badge/Spring_Cloud-Microservices-green?style=for-the-badge)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)
-![Liquibase](https://img.shields.io/badge/Liquibase-2962FF?style=for-the-badge)
-![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge\&logo=apachemaven\&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge\&logo=git\&logoColor=white)
 
-</p>
 
----
 
-# 📖 Descripción
 
-**Cigna Project** es una plataforma desarrollada bajo una arquitectura de microservicios para gestionar procesos clínicos.
 
-Cada dominio de negocio se encuentra desacoplado en un servicio independiente, permitiendo una arquitectura escalable, mantenible y preparada para futuras integraciones.
+</div>
 
-El proyecto fue desarrollado como una solución académica aplicando buenas prácticas de desarrollo backend, comunicación entre servicios y gestión independiente de bases de datos.
+📖 Descripción
 
----
+Cigna Project es una plataforma desarrollada bajo una arquitectura de microservicios que simula el funcionamiento de un sistema clínico moderno.
 
-# 🏗 Arquitectura
+Cada dominio de negocio se implementa como un servicio independiente, lo que permite un desarrollo desacoplado, una mayor escalabilidad y una mejor mantenibilidad del sistema.
 
-```mermaid
+La plataforma incorpora autenticación mediante JWT, descubrimiento de servicios con Eureka, un API Gateway como punto de entrada único, documentación con Swagger/OpenAPI y persistencia independiente para cada microservicio.
+
+🏗 Arquitectura
 graph TD
 
 Cliente --> API_Gateway
 
-API_Gateway --> Usuario_Service
-API_Gateway --> Servicio_Service
-API_Gateway --> Agenda_Service
-API_Gateway --> Reserva_Service
-API_Gateway --> Tratamiento_Service
+API_Gateway --> Auth
+API_Gateway --> Usuarios
+API_Gateway --> Servicios
+API_Gateway --> Tratamientos
+API_Gateway --> Agendas
+API_Gateway --> Reservas
+API_Gateway --> Compras
+API_Gateway --> Pagos
+API_Gateway --> Historial
+API_Gateway --> Sucursales
+API_Gateway --> Notificaciones
 
-Usuario_Service --> MySQL_Usuarios
-Servicio_Service --> MySQL_Servicios
-Agenda_Service --> MySQL_Agendas
-Reserva_Service --> MySQL_Reservas
-Tratamiento_Service --> MySQL_Tratamientos
-
-Agenda_Service --> Servicio_Service
-Reserva_Service --> Usuario_Service
-Reserva_Service --> Agenda_Service
-```
-
----
-
-# 📦 Microservicios
-
-| Microservicio       | Descripción                                             |
-| ------------------- | ------------------------------------------------------- |
-| Discovery Server    | Registro y descubrimiento de servicios mediante Eureka. |
-| API Gateway         | Punto único de acceso para todos los microservicios.    |
-| Usuario Service     | Administración de usuarios del sistema.                 |
-| Servicio Service    | Gestión de servicios clínicos disponibles.              |
-| Agenda Service      | Administración de agendas médicas y disponibilidad.     |
-| Reserva Service     | Gestión de reservas realizadas por los usuarios.        |
-| Tratamiento Service | Administración de tratamientos clínicos.                |
-
----
-
-# ⭐ Características
-
-* Arquitectura basada en microservicios.
-* Comunicación entre servicios mediante Spring Cloud.
-* API Gateway como punto de entrada.
-* Service Discovery con Eureka.
-* Persistencia independiente por microservicio.
-* Gestión de migraciones con Liquibase.
-* APIs REST.
-* Maven como herramienta de construcción.
-* Bases de datos MySQL independientes.
-
----
-
-# 🗂 Estructura del proyecto
-
-```text
+Reservas --> Usuarios
+Reservas --> Agendas
+Compras --> Pagos
+Compras --> Servicios
+Historial --> Usuarios
+Historial --> Tratamientos
+Notificaciones --> Usuarios
+📦 Microservicios
+Servicio	Responsabilidad
+🔐 Auth Service	Autenticación y autorización mediante JWT.
+👤 Usuario Service	Gestión de usuarios del sistema.
+🩺 Servicio Service	Administración de servicios clínicos.
+💊 Tratamiento Service	Gestión de tratamientos médicos.
+📅 Agenda Service	Administración de agendas y disponibilidad.
+📋 Reserva Service	Gestión de reservas de atención.
+🛒 Compra Service	Registro de compras realizadas por los usuarios.
+💳 Pago Service	Procesamiento de pagos asociados a compras.
+📖 Historial Service	Administración del historial clínico.
+🏥 Sucursal Service	Gestión de sucursales y sedes.
+🔔 Notificación Service	Envío de notificaciones a los usuarios.
+🚀 Características
+Arquitectura basada en microservicios.
+API Gateway como punto único de acceso.
+Eureka Discovery Server.
+Seguridad mediante JWT.
+Swagger/OpenAPI en todos los servicios.
+Comunicación REST entre microservicios.
+Migraciones automáticas con Liquibase.
+Bases de datos independientes por servicio.
+Contenedorización mediante Docker.
+Preparado para despliegue en Railway o Render.
+📁 Organización del repositorio
 cigna/
+│
+├── discovery-server/
+├── api-gateway/
+├── auth-service/
+├── usuario-service/
+├── servicio-service/
+├── agenda-service/
+├── reserva-service/
+├── compra-service/
+├── pago-service/
+├── historial-service/
+├── tratamiento-service/
+├── sucursal-service/
+├── notificacion-service/
+│
+└── docs/
+📚 Documentación
 
-├── README.md
-├── cigna-nuevo/
-│   ├── discovery-server/
-│   ├── api-gateway/
-│   ├── usuario-service/
-│   ├── servicio-service/
-│   ├── agenda-service/
-│   ├── reserva-service/
-│   ├── tratamiento-service/
-│   └── README.md
-```
+Cada microservicio posee su propia documentación técnica, donde encontrarás:
 
----
+Descripción del servicio
+Responsabilidades
+Comunicación con otros servicios
+Endpoints REST
+Swagger UI
+Variables de entorno
+Ejecución local
+Docker
+Despliegue
+Tests y cobertura
 
-# 📷 Capturas
+Esto permite mantener una documentación modular y sencilla de mantener.
 
-Próximamente se incorporarán capturas de:
+🔒 Seguridad
 
-* Eureka Dashboard
-* Swagger UI
-* Postman Collection
-* Base de datos
+El sistema utiliza autenticación basada en JSON Web Token (JWT).
 
----
+El flujo de autenticación es:
 
-# 🚀 Inicio rápido
+El usuario inicia sesión mediante Auth Service.
+Se genera un token JWT.
+El cliente envía el token en cada petición.
+Los microservicios validan el token antes de procesar la solicitud.
+📸 Próximamente
 
-La documentación técnica completa para instalar y ejecutar el proyecto se encuentra en:
+Se incorporarán imágenes de:
 
-```text
-cigna-nuevo/README.md
-```
+Dashboard de Eureka
+Swagger UI
+Docker Compose
+Arquitectura del sistema
+Colección Postman
+👨‍💻 Equipo
 
-Allí encontrarás:
+Proyecto desarrollado como parte de una solución académica para la implementación de una arquitectura de microservicios utilizando el ecosistema Spring.
 
-* Requisitos
-* Configuración
-* Orden de ejecución
-* Liquibase
-* Endpoints
-* Bases de datos
-* Guía para desarrolladores
+📄 Licencia
 
----
-
-# 👥 Equipo
-
-Proyecto desarrollado por el equipo **Cigna Project** como parte del desarrollo de una plataforma clínica basada en microservicios.
-
----
-
-# 📄 Licencia
-
-Este proyecto fue desarrollado con fines académicos.
+Proyecto desarrollado con fines académicos.
