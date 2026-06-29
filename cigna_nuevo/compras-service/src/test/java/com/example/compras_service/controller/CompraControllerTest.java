@@ -1,6 +1,9 @@
 package com.example.compras_service.controller;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -49,7 +52,7 @@ public class CompraControllerTest {
         mockMvc.perform(get("/compras"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].idPaciente").value(2L))
+                .andExpect(jsonPath("$[0].idUsuario").value(2L))
                 .andExpect(jsonPath("$[0].idServicio").value(3L))
                 .andExpect(jsonPath("$[0].estado").value("PENDIENTE"));
     }
@@ -61,34 +64,37 @@ public class CompraControllerTest {
         mockMvc.perform(get("/compras/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.idPaciente").value(2L))
+                .andExpect(jsonPath("$.idUsuario").value(2L))
                 .andExpect(jsonPath("$.idServicio").value(3L))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
     @Test
     public void testCrearCompra() throws Exception {
-        when(compraService.guardar(any(Compra.class))).thenReturn(compra);
+        when(compraService.guardar(any(Compra.class), anyString())).thenReturn(compra);
 
         mockMvc.perform(post("/compras")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization","Bearer test-token")
                         .content(objectMapper.writeValueAsString(compraDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.idPaciente").value(2L))
+                .andExpect(jsonPath("$.idUsuario").value(2L))
                 .andExpect(jsonPath("$.idServicio").value(3L))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
     @Test
     public void testActualizarCompra() throws Exception {
-        when(compraService.actualizar(eq(1L), any(Compra.class))).thenReturn(compra);
+        when(compraService.actualizar(eq(1L), any(Compra.class), anyString())).thenReturn(compra);
 
         mockMvc.perform(put("/compras/1")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization","Bearer test-token")
                         .content(objectMapper.writeValueAsString(compraDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.idUsuario").value(2L))
                 .andExpect(jsonPath("$.estado").value("PENDIENTE"));
     }
 
@@ -96,7 +102,8 @@ public class CompraControllerTest {
     public void testEliminarCompra() throws Exception {
         doNothing().when(compraService).eliminar(1L);
 
-        mockMvc.perform(delete("/compras/1"))
+        mockMvc.perform(delete("/compras/1")
+                        .header("Authorization","Bearer test-token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Compra Eliminada Exitosamente"));
 
@@ -108,7 +115,8 @@ public class CompraControllerTest {
     public void testExisteCompra() throws Exception {
         when(compraService.existePorId(1L)).thenReturn(true);
 
-        mockMvc.perform(get("/compras/1/exists"))
+        mockMvc.perform(get("/compras/1/exists")
+                        .header("Authorization","Bearer test-token"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }

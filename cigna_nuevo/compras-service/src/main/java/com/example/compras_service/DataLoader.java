@@ -25,7 +25,7 @@ public class DataLoader implements CommandLineRunner {
         String[] estados = {"PENDIENTE", "PAGADO", "CANCELADO"};
         for (int i = 0; i < 5; i++) {
             Compra compra = new Compra();
-            compra.setIdPaciente((long) random.nextInt(3) + 1);
+            compra.setIdUsuario((long) random.nextInt(3) + 1);
             compra.setIdServicio((long) random.nextInt(3) + 1);
             compra.setFechaCompra(new Date());
             compra.setEstado(faker.options().option(estados));

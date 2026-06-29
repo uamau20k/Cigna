@@ -20,8 +20,8 @@ public class CompraService {
     private final WebClient webClient;
     private static final Logger logger = LoggerFactory.getLogger(CompraService.class);
 
-    @Value("${api.paciente.exists}")
-    private String pacientePath;
+    @Value("${api.usuario.exists}")
+    private String usuarioPath;
 
     @Value("${api.servicio.exists}")
     private String servicioPath;
@@ -31,34 +31,36 @@ public class CompraService {
         this.webClient = webClient;
     }
 
-    public Compra guardar(Compra compra) {
-        logger.info("Iniciando guardar compra con idPaciente={}, idServicio={}, estado={}",
-                compra.getIdPaciente(), compra.getIdServicio(), compra.getEstado());
+    public Compra guardar(Compra compra, String token) {
+        logger.info("Iniciando guardar compra con idUsuario={}, idServicio={}, estado={}",
+                compra.getIdUsuario(), compra.getIdServicio(), compra.getEstado());
         try {
             if (compra.getEstado() == null || compra.getEstado().isBlank())
                 throw new IllegalArgumentException("estado requerido");
             if (compra.getFechaCompra() == null) compra.setFechaCompra(new Date());
 
-            logger.info("Validando existencia de paciente idPaciente={}", compra.getIdPaciente());
-            Boolean existePaciente = webClient.get()
-                    .uri(String.format(pacientePath, compra.getIdPaciente()))
+            logger.info("Validando existencia de usuario idUsuario={}", compra.getIdUsuario());
+            Boolean existeUsuario = webClient.get()
+                    .uri(String.format(usuarioPath, compra.getIdUsuario()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
 
-            logger.info("Respuesta de api-gateway: existePaciente={}", existePaciente);
-            if (existePaciente == null) {
-                logger.error("No se pudo validar la existencia del paciente");
-                throw new BadRequestException("No se pudo validar la existencia del paciente");
+            logger.info("Respuesta de api-gateway: existeUsuario={}", existeUsuario);
+            if (existeUsuario == null) {
+                logger.error("No se pudo validar la existencia del usuario");
+                throw new BadRequestException("No se pudo validar la existencia del usuario");
             }
-            if (Boolean.FALSE.equals(existePaciente)) {
-                logger.warn("Paciente no existe con id={}", compra.getIdPaciente());
-                throw new ResourceNotFoundException("Paciente no existe");
+            if (Boolean.FALSE.equals(existeUsuario)) {
+                logger.warn("Usuario no existe con id={}", compra.getIdUsuario());
+                throw new ResourceNotFoundException("Usuario no existe");
             }
 
             logger.info("Validando existencia de servicio idServicio={}", compra.getIdServicio());
             Boolean existeServicio = webClient.get()
                     .uri(String.format(servicioPath, compra.getIdServicio()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
@@ -100,7 +102,7 @@ public class CompraService {
         return compra;
     }
 
-    public Compra actualizar(Long id, Compra compra) {
+    public Compra actualizar(Long id, Compra compra, String token) {
         logger.info("Iniciando actualizar compra id={}", id);
         try {
             Compra existente = compraRepository.findById(id)
@@ -110,21 +112,24 @@ public class CompraService {
                 throw new IllegalArgumentException("estado requerido");
             if (compra.getFechaCompra() == null) compra.setFechaCompra(new Date());
 
-            logger.info("Validando existencia de paciente idPaciente={}", compra.getIdPaciente());
-            Boolean existePaciente = webClient.get()
-                    .uri(String.format(pacientePath, compra.getIdPaciente()))
+            logger.info("TOKEN RECIBIDO = [{}]", token);
+            logger.info("Validando existencia de usuario idUsuario={}", compra.getIdUsuario());
+            Boolean existeUsuario = webClient.get()
+                    .uri(String.format(usuarioPath, compra.getIdUsuario()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
 
-            if (existePaciente == null)
-                throw new BadRequestException("No se pudo validar la existencia del paciente");
-            if (Boolean.FALSE.equals(existePaciente))
-                throw new ResourceNotFoundException("Paciente no existe");
+            if (existeUsuario == null)
+                throw new BadRequestException("No se pudo validar la existencia del usuario");
+            if (Boolean.FALSE.equals(existeUsuario))
+                throw new ResourceNotFoundException("Usuario no existe");
 
             logger.info("Validando existencia de servicio idServicio={}", compra.getIdServicio());
             Boolean existeServicio = webClient.get()
                     .uri(String.format(servicioPath, compra.getIdServicio()))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
@@ -134,7 +139,7 @@ public class CompraService {
             if (Boolean.FALSE.equals(existeServicio))
                 throw new ResourceNotFoundException("Servicio no existe");
 
-            existente.setIdPaciente(compra.getIdPaciente());
+            existente.setIdUsuario(compra.getIdUsuario());
             existente.setIdServicio(compra.getIdServicio());
             existente.setFechaCompra(compra.getFechaCompra());
             existente.setEstado(compra.getEstado());

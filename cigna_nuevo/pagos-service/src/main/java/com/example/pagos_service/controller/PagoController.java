@@ -83,7 +83,7 @@ public class PagoController {
     } catch (Exception e) {
         logger.error("Error al actualizar pago id={}: {}", id, e.getMessage());
         throw e;
-    }
+    } 
 }
 
     @DeleteMapping("/{id}")

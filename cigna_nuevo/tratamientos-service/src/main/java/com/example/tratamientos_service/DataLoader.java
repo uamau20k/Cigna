@@ -1,10 +1,11 @@
 package com.example.tratamientos_service;
 
-import com.example.tratamientos_service.model.Tratamiento;
-import com.example.tratamientos_service.repository.TratamientoRepository;
 import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import com.example.tratamientos_service.model.Tratamiento;
+import com.example.tratamientos_service.repository.TratamientoRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -27,12 +28,23 @@ public class DataLoader implements CommandLineRunner {
             tratamiento.setNombre(faker.options().option("Antibioticoterapia","Fisioterapia","Rehabilitacion","Control Nutricional","Kinesioterapia"));
             
             // La descripción ahora se generará con estructura y conectores en español
-            tratamiento.setDescripcion(faker.lorem().sentence(8));
+            tratamiento.setDescripcion(faker.options().option(
+        "Tratamiento con antibióticos por 10 días",
+                "Sesiones de rehabilitación física tres veces por semana",
+                "Control nutricional con dieta personalizada",
+                "Terapia de kinesioterapia para recuperación muscular",
+                "Fisioterapia post operatoria de rodilla"
+                ));
             
             tratamiento.setDuracionDias(faker.number().numberBetween(7, 180));
             
-            // Une las 3 palabras con comas de forma limpia (ej: "palabra1, palabra2, palabra3")
-            tratamiento.setMedicamentos(String.join(", ", faker.lorem().words(3)));
+            tratamiento.setMedicamentos(faker.options().option(
+            "Amoxicilina, Ibuprofeno, Paracetamol",
+            "Omeprazol, Metformina, Atorvastatina",
+            "Losartán, Enalapril, Aspirina",
+            "Clonazepam, Sertralina, Melatonina",
+            "Prednisona, Salbutamol, Bromhexina"
+        ));
             
             tratamiento.setActivo(true);
             

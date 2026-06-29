@@ -21,8 +21,8 @@ public class HistorialClinicoService {
     private final WebClient webClient;
     private static final Logger logger = LoggerFactory.getLogger(HistorialClinicoService.class);
 
-    @Value("${api.cliente.exists}")
-    private String clientePath;
+    @Value("${api.usuario.exists}") // se cambio para el funcionamiento
+    private String usuarioPath;
 
     public HistorialClinicoService(HistorialClinicoRepository historialRepository, WebClient webClient) {
         this.historialRepository = historialRepository;
@@ -30,10 +30,10 @@ public class HistorialClinicoService {
     }
 
     public HistorialClinico guardar(HistorialClinico historial, String token) {
-        logger.info("Guardando historial idCliente={}", historial.getIdCliente());
-        Boolean existeCliente = validarClienteRemoto(historial.getIdCliente(), token);
-        if (existeCliente == null) throw new BadRequestException("No se pudo validar el cliente");
-        if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
+        logger.info("Guardando historial idUsuario={}", historial.getIdUsuario());
+        Boolean existeUsuario = validarUsuarioRemoto(historial.getIdUsuario(), token);
+        if (existeUsuario == null) throw new BadRequestException("No se pudo validar el usuario");
+        if (Boolean.FALSE.equals(existeUsuario)) throw new ResourceNotFoundException("Usuario no existe");
         if (historial.getFecha() == null) historial.setFecha(new Date());
         HistorialClinico guardado = historialRepository.save(historial);
         logger.info("Historial guardado id={}", guardado.getId());
@@ -47,9 +47,9 @@ public class HistorialClinicoService {
         return lista;
     }
 
-    public List<HistorialClinico> listarPorCliente(Long idCliente) {
-        logger.info("Listando historial del cliente id={}", idCliente);
-        return historialRepository.findByIdCliente(idCliente);
+    public List<HistorialClinico> listarPorUsuario(Long idUsuario) {
+        logger.info("Listando historial del usuario id={}", idUsuario);
+        return historialRepository.findByIdUsuario(idUsuario);
     }
 
     public HistorialClinico obtenerPorId(Long id) {
@@ -62,10 +62,10 @@ public class HistorialClinicoService {
     logger.info("Actualizando historial id={}", id);
     HistorialClinico existente = historialRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Historial clinico no existe"));
-    Boolean existeCliente = validarClienteRemoto(historial.getIdCliente(), token);
-    if (existeCliente == null) throw new BadRequestException("No se pudo validar el cliente");
-    if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
-    existente.setIdCliente(historial.getIdCliente());
+    Boolean existeUsuario = validarUsuarioRemoto(historial.getIdUsuario(), token);
+    if (existeUsuario == null) throw new BadRequestException("No se pudo validar el usuario");
+    if (Boolean.FALSE.equals(existeUsuario)) throw new ResourceNotFoundException("Usuario no existe");
+    existente.setIdUsuario(historial.getIdUsuario());
     existente.setDiagnostico(historial.getDiagnostico());
     existente.setTratamiento(historial.getTratamiento());
     if (historial.getFecha() != null) existente.setFecha(historial.getFecha());
@@ -82,19 +82,19 @@ public class HistorialClinicoService {
         logger.info("Historial eliminado id={}", id);
     }
 
-    private Boolean validarClienteRemoto(Long idCliente, String token) {
-     try {
-            return webClient.get()
-                    .uri(String.format(clientePath, idCliente))
-                    .header("Authorization", token)
-                    .retrieve()
-                    .bodyToMono(Boolean.class)
-                    .block();
-        } catch (WebClientRequestException e) {
-            logger.error("Error de conexion al validar cliente id={}: {}", idCliente, e.getMessage());
-            throw new BadRequestException("No se pudo conectar con el servicio de clientes");
-        }
+    private Boolean validarUsuarioRemoto(Long idUsuario, String token) {
+    try {
+        return webClient.get()
+                .uri(String.format(usuarioPath, idUsuario))  // ← usuarioPath
+                .header("Authorization", token)
+                .retrieve()
+                .bodyToMono(Boolean.class)
+                .block();
+    } catch (WebClientRequestException e) {
+        logger.error("Error de conexion al validar usuario id={}: {}", idUsuario, e.getMessage());
+        throw new BadRequestException("No se pudo conectar con el servicio de usuarios");
     }
+}
 
     public Boolean existePorId(Long id) {  
         return historialRepository.existsById(id);
