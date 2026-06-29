@@ -18,8 +18,8 @@ public class ReservaDTO {
 
     private Long id;
 
-    @NotNull(message = "El ID del cliente es obligatorio")
-    private Long idCliente;
+    @NotNull(message = "El ID del usuario es obligatorio")
+    private Long idUsuario;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date fechaReserva;
@@ -36,11 +36,11 @@ public class ReservaDTO {
     private String estado;
 
     public Reserva toModel() {
-        return new Reserva(id, idCliente, fechaReserva, descripcion, estado);
+        return new Reserva(id, idUsuario, fechaReserva, descripcion, estado);
     }
 
     public static ReservaDTO fromModel(Reserva r) {
-        return new ReservaDTO(r.getId(), r.getIdCliente(), r.getFechaReserva(),
+        return new ReservaDTO(r.getId(), r.getIdUsuario(), r.getFechaReserva(),
                 r.getDescripcion(), r.getEstado());
     }
 }

@@ -24,8 +24,8 @@ public class ReservaService {
     private final ReservaRepository reservaRepository;
     private final WebClient webClient;
 
-    @Value("${api.cliente.exists}")
-    private String clientePath;
+    @Value("${api.usuario.exists}")
+    private String usuarioPath;
 
     public ReservaService(ReservaRepository reservaRepository, WebClient webClient) {
         this.reservaRepository = reservaRepository;
@@ -50,17 +50,17 @@ public class ReservaService {
     }
 
     public Reserva guardar(Reserva reserva, String token) {
-        logger.info("Iniciando guardar reserva idCliente={}, descripcion={}", reserva.getIdCliente(), reserva.getDescripcion());
+        logger.info("Iniciando guardar reserva idUsuario={}, descripcion={}", reserva.getIdUsuario(), reserva.getDescripcion());
 
         if (reserva.getEstado() != null && !esEstadoValido(reserva.getEstado())) {
             throw new BadRequestException("Estado no valido: " + reserva.getEstado() + ". Valores permitidos: " + ESTADOS_VALIDOS);
         }
 
-        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente(), token);
-        if (existeCliente == null) throw new BadRequestException("No se pudo validar la existencia del cliente");
-        if (Boolean.FALSE.equals(existeCliente)) {
-            logger.warn("Cliente no existe id={}", reserva.getIdCliente());
-            throw new ResourceNotFoundException("Cliente no existe");
+        Boolean existeUsuario = validarUsuarioRemoto(reserva.getIdUsuario(), token);
+        if (existeUsuario == null) throw new BadRequestException("No se pudo validar la existencia del usuario");
+        if (Boolean.FALSE.equals(existeUsuario)) {
+            logger.warn("Usuario no existe id={}", reserva.getIdUsuario());
+            throw new ResourceNotFoundException("Usuario no existe");
         }
 
         if (reserva.getFechaReserva() == null) reserva.setFechaReserva(new Date());
@@ -78,9 +78,9 @@ public class ReservaService {
         return lista;
     }
 
-    public List<Reserva> listarPorCliente(Long idCliente) {
-        logger.info("Listando reservas del cliente id={}", idCliente);
-        return reservaRepository.findByIdCliente(idCliente);
+    public List<Reserva> listarPorUsuario(Long idUsuario) {
+        logger.info("Listando reservas del usuario id={}", idUsuario);
+        return reservaRepository.findByIdUsuario(idUsuario);
     }
 
     public Reserva obtenerPorId(Long id) {
@@ -101,11 +101,11 @@ public class ReservaService {
             throw new BadRequestException("Estado no valido: " + reserva.getEstado());
         }
 
-        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente(), token);
-        if (existeCliente == null) throw new BadRequestException("No se pudo validar la existencia del cliente");
-        if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
+        Boolean existeUsuario = validarUsuarioRemoto(reserva.getIdUsuario(), token);
+        if (existeUsuario == null) throw new BadRequestException("No se pudo validar la existencia del usuario");
+        if (Boolean.FALSE.equals(existeUsuario)) throw new ResourceNotFoundException("Usuario no existe");
 
-        existente.setIdCliente(reserva.getIdCliente());
+        existente.setIdUsuario(reserva.getIdUsuario());
         existente.setDescripcion(reserva.getDescripcion());
         existente.setEstado(reserva.getEstado());
         if (reserva.getFechaReserva() != null) existente.setFechaReserva(reserva.getFechaReserva());
@@ -140,17 +140,17 @@ public class ReservaService {
         return reservaRepository.existsById(id);
     }
 
-    private Boolean validarClienteRemoto(Long idCliente, String token) {
+    private Boolean validarUsuarioRemoto(Long idUsuario, String token) {
         try {
             return webClient.get()
-                    .uri(String.format(clientePath, idCliente))
+                    .uri(String.format(usuarioPath, idUsuario))
                     .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
         } catch (WebClientRequestException e) {
-            logger.error("Error de conexion al validar cliente id={}: {}", idCliente, e.getMessage());
-            throw new BadRequestException("No se pudo conectar con el servicio de clientes");
+            logger.error("Error de conexion al validar usuario id={}: {}", idUsuario, e.getMessage());
+            throw new BadRequestException("No se pudo conectar con el servicio de usuarios");
         }
     }
 }

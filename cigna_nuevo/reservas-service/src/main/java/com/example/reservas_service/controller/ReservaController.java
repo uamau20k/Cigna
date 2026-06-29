@@ -30,7 +30,7 @@ public class ReservaController {
     @Operation(summary = "Crear reserva")
     public ResponseEntity<ReservaDTO> crearReserva(@Valid @RequestBody ReservaDTO dto,
                                                     @RequestHeader("Authorization") String token) {
-        logger.info("POST /reservas - idCliente={}", dto.getIdCliente());
+        logger.info("POST /reservas - idUsuario={}", dto.getIdUsuario());
         Reserva nueva = reservaService.guardar(dto.toModel(), token);
         logger.info("Reserva creada id={}", nueva.getId());
         return ResponseEntity.ok(ReservaDTO.fromModel(nueva));
@@ -53,11 +53,11 @@ public class ReservaController {
         return ResponseEntity.ok(ReservaDTO.fromModel(reservaService.obtenerPorId(id)));
     }
 
-    @GetMapping("/cliente/{idCliente}")
-    @Operation(summary = "Listar reservas por cliente")
-    public ResponseEntity<List<ReservaDTO>> listarPorCliente(@PathVariable Long idCliente) {
-        logger.info("GET /reservas/cliente/{}", idCliente);
-        List<ReservaDTO> dtos = reservaService.listarPorCliente(idCliente).stream()
+    @GetMapping("/usuario/{idUsuario}")
+    @Operation(summary = "Listar reservas por usuario")
+    public ResponseEntity<List<ReservaDTO>> listarPorUsuario(@PathVariable Long idUsuario) {
+        logger.info("GET /reservas/usuario/{}", idUsuario);
+        List<ReservaDTO> dtos = reservaService.listarPorUsuario(idUsuario).stream()
                 .map(ReservaDTO::fromModel).collect(Collectors.toList());
         return ResponseEntity.ok(dtos);
     }
