@@ -74,6 +74,14 @@ public class ServicioController {
         return ResponseEntity.ok(servicioService.existePorId(id));
     }
 
+    @GetMapping("/{id}/nombre")
+    @Operation(summary = "Obtener nombre del servicio por ID")
+    public ResponseEntity<String> obtenerNombre(@PathVariable Long id) {
+        logger.info("GET /servicios/{}/nombre", id);
+        String nombre = servicioService.obtenerPorId(id).getNombre();
+        return ResponseEntity.ok(nombre);
+}
+
     @PostMapping
     @Operation(summary = "Crear servicio", description = "Registra un nuevo servicio médico en el catálogo.")
     @ApiResponses(value = {
