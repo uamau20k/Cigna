@@ -64,9 +64,10 @@ public class ReservaControllerTest {
 
     @Test
     void testCrearReserva() throws Exception {
-        when(reservaService.guardar(any(Reserva.class))).thenReturn(reserva);
+        when(reservaService.guardar(any(Reserva.class), anyString())).thenReturn(reserva);
 
         mockMvc.perform(post("/reservas")
+                        .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reservaDto)))
                 .andExpect(status().isOk())
@@ -76,9 +77,10 @@ public class ReservaControllerTest {
 
     @Test
     void testActualizarReserva() throws Exception {
-        when(reservaService.actualizar(eq(1L), any(Reserva.class))).thenReturn(reserva);
+        when(reservaService.actualizar(eq(1L), any(Reserva.class), anyString())).thenReturn(reserva);
 
         mockMvc.perform(put("/reservas/1")
+                        .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reservaDto)))
                 .andExpect(status().isOk())
