@@ -44,17 +44,10 @@ class ReservaServiceTest {
     }
 
     private void mockClienteExistente() {
-        // GIVEN
-
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
-        // GIVEN
-
         when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
-        // GIVEN
-
+        when(requestHeadersSpec.header(anyString(), anyString())).thenReturn(requestHeadersSpec);
         when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
-        // GIVEN
-
         when(responseSpec.bodyToMono(Boolean.class)).thenReturn(Mono.just(Boolean.TRUE));
     }
 
@@ -70,7 +63,7 @@ class ReservaServiceTest {
 
         when(reservaRepository.save(any(Reserva.class))).thenReturn(guardada);
 
-        Reserva resultado = reservaService.guardar(reserva);
+        Reserva resultado = reservaService.guardar(reserva, "Bearer token");
 
         // WHEN
 
@@ -135,7 +128,7 @@ class ReservaServiceTest {
 
         when(reservaRepository.save(any())).thenReturn(guardada);
 
-        Reserva resultado = reservaService.actualizar(1L, cambios);
+        Reserva resultado = reservaService.actualizar(1L, cambios, "Bearer token");
 
         assertNotNull(resultado);
         assertEquals("CONFIRMADA", resultado.getEstado());
@@ -225,7 +218,6 @@ class ReservaServiceTest {
     @Test
     @DisplayName("Negocio: cancelar reserva PENDIENTE cambia estado a CANCELADA")
     void testNegocio_CancelarReservaPendiente() {
-        mockClienteExistente();
         Reserva pendiente = new Reserva(1L, 1L, new Date(), "Test", "PENDIENTE");
         // GIVEN
 

@@ -28,9 +28,10 @@ public class ReservaController {
 
     @PostMapping
     @Operation(summary = "Crear reserva")
-    public ResponseEntity<ReservaDTO> crearReserva(@Valid @RequestBody ReservaDTO dto) {
+    public ResponseEntity<ReservaDTO> crearReserva(@Valid @RequestBody ReservaDTO dto,
+                                                    @RequestHeader("Authorization") String token) {
         logger.info("POST /reservas - idCliente={}", dto.getIdCliente());
-        Reserva nueva = reservaService.guardar(dto.toModel());
+        Reserva nueva = reservaService.guardar(dto.toModel(), token);
         logger.info("Reserva creada id={}", nueva.getId());
         return ResponseEntity.ok(ReservaDTO.fromModel(nueva));
     }
@@ -70,9 +71,10 @@ public class ReservaController {
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar reserva")
     public ResponseEntity<ReservaDTO> actualizarReserva(@PathVariable Long id,
-                                                         @Valid @RequestBody ReservaDTO dto) {
+                                                        @Valid @RequestBody ReservaDTO dto,
+                                                        @RequestHeader("Authorization") String token) {
         logger.info("PUT /reservas/{} - Actualizando reserva", id);
-        Reserva actualizada = reservaService.actualizar(id, dto.toModel());
+        Reserva actualizada = reservaService.actualizar(id, dto.toModel(), token);
         logger.info("Reserva actualizada id={}", id);
         return ResponseEntity.ok(ReservaDTO.fromModel(actualizada));
     }

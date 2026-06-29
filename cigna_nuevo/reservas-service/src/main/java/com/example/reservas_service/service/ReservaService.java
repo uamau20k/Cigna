@@ -49,14 +49,14 @@ public class ReservaService {
         return diff / (1000 * 60 * 60 * 24);
     }
 
-    public Reserva guardar(Reserva reserva) {
+    public Reserva guardar(Reserva reserva, String token) {
         logger.info("Iniciando guardar reserva idCliente={}, descripcion={}", reserva.getIdCliente(), reserva.getDescripcion());
 
         if (reserva.getEstado() != null && !esEstadoValido(reserva.getEstado())) {
             throw new BadRequestException("Estado no valido: " + reserva.getEstado() + ". Valores permitidos: " + ESTADOS_VALIDOS);
         }
 
-        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente());
+        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente(), token);
         if (existeCliente == null) throw new BadRequestException("No se pudo validar la existencia del cliente");
         if (Boolean.FALSE.equals(existeCliente)) {
             logger.warn("Cliente no existe id={}", reserva.getIdCliente());
@@ -92,7 +92,7 @@ public class ReservaService {
                 });
     }
 
-    public Reserva actualizar(Long id, Reserva reserva) {
+    public Reserva actualizar(Long id, Reserva reserva, String token) {
         logger.info("Actualizando reserva id={}", id);
         Reserva existente = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no existe"));
@@ -101,7 +101,7 @@ public class ReservaService {
             throw new BadRequestException("Estado no valido: " + reserva.getEstado());
         }
 
-        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente());
+        Boolean existeCliente = validarClienteRemoto(reserva.getIdCliente(), token);
         if (existeCliente == null) throw new BadRequestException("No se pudo validar la existencia del cliente");
         if (Boolean.FALSE.equals(existeCliente)) throw new ResourceNotFoundException("Cliente no existe");
 
@@ -140,10 +140,11 @@ public class ReservaService {
         return reservaRepository.existsById(id);
     }
 
-    private Boolean validarClienteRemoto(Long idCliente) {
+    private Boolean validarClienteRemoto(Long idCliente, String token) {
         try {
             return webClient.get()
                     .uri(String.format(clientePath, idCliente))
+                    .header("Authorization", token)
                     .retrieve()
                     .bodyToMono(Boolean.class)
                     .block();
