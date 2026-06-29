@@ -22,6 +22,14 @@ public class Reserva {
     @Column(nullable = false)
     private Long idUsuario;
 
+    @NotNull(message = "El ID del servicio es obligatorio")
+    @Column(nullable = false)
+    private Long idServicio;
+
+    @NotNull(message = "El ID del tratamiento es obligatorio")
+    @Column(nullable = false)
+    private Long idTratamiento;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date fechaReserva;

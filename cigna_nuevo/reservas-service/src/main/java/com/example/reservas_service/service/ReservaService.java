@@ -27,6 +27,15 @@ public class ReservaService {
     @Value("${api.usuario.exists}")
     private String usuarioPath;
 
+    @Value("${api.servicio.nombre}")
+    private String servicioPath;
+
+    @Value("${api.tratamiento.exists}")
+    private String tratamientoPath;
+
+    @Value("${api.servicio.exists}")
+    private String servicioExistsPath;
+
     public ReservaService(ReservaRepository reservaRepository, WebClient webClient) {
         this.reservaRepository = reservaRepository;
         this.webClient = webClient;
@@ -51,7 +60,6 @@ public class ReservaService {
 
     public Reserva guardar(Reserva reserva, String token) {
         logger.info("Iniciando guardar reserva idUsuario={}, descripcion={}", reserva.getIdUsuario(), reserva.getDescripcion());
-
         if (reserva.getEstado() != null && !esEstadoValido(reserva.getEstado())) {
             throw new BadRequestException("Estado no valido: " + reserva.getEstado() + ". Valores permitidos: " + ESTADOS_VALIDOS);
         }
@@ -62,6 +70,23 @@ public class ReservaService {
             logger.warn("Usuario no existe id={}", reserva.getIdUsuario());
             throw new ResourceNotFoundException("Usuario no existe");
         }
+        Boolean existeTratamiento = validarTratamientoRemoto(reserva.getIdTratamiento(), token);
+        if (existeTratamiento == null) throw new BadRequestException("No se pudo validar la existencia del tratamiento");
+        if (Boolean.FALSE.equals(existeTratamiento)) {
+            logger.warn("Tratamiento no existe id={}", reserva.getIdTratamiento());
+            throw new ResourceNotFoundException("Tratamiento no existe");
+        }
+        Boolean existeServicio = validarServicioRemoto(reserva.getIdServicio(), token);
+        if (existeServicio == null) throw new BadRequestException("No se pudo validar la existencia del servicio");
+        if (Boolean.FALSE.equals(existeServicio)) {
+            logger.warn("Servicio no existe id={}", reserva.getIdServicio());
+            throw new ResourceNotFoundException("Servicio no existe");
+        }
+
+        if (reserva.getIdServicio() != null) {
+        String nombreServicio = obtenerNombreServicio(reserva.getIdServicio(), token);
+        reserva.setDescripcion(nombreServicio);
+    }
 
         if (reserva.getFechaReserva() == null) reserva.setFechaReserva(new Date());
         if (reserva.getEstado() == null || reserva.getEstado().isBlank()) reserva.setEstado("PENDIENTE");
@@ -105,9 +130,19 @@ public class ReservaService {
         if (existeUsuario == null) throw new BadRequestException("No se pudo validar la existencia del usuario");
         if (Boolean.FALSE.equals(existeUsuario)) throw new ResourceNotFoundException("Usuario no existe");
 
+         Boolean existeServicio = validarServicioRemoto(reserva.getIdServicio(), token);
+        if (existeServicio == null) throw new BadRequestException("No se pudo validar la existencia del servicio");
+        if (Boolean.FALSE.equals(existeServicio)) throw new ResourceNotFoundException("Servicio no existe");
+
+
         existente.setIdUsuario(reserva.getIdUsuario());
-        existente.setDescripcion(reserva.getDescripcion());
+        existente.setIdServicio(reserva.getIdServicio());
+        existente.setIdTratamiento(reserva.getIdTratamiento());
         existente.setEstado(reserva.getEstado());
+        if (reserva.getIdServicio() != null) {
+        String nombreServicio = obtenerNombreServicio(reserva.getIdServicio(), token);
+        existente.setDescripcion(nombreServicio);
+        }
         if (reserva.getFechaReserva() != null) existente.setFechaReserva(reserva.getFechaReserva());
 
         Reserva actualizada = reservaRepository.save(existente);
@@ -153,4 +188,46 @@ public class ReservaService {
             throw new BadRequestException("No se pudo conectar con el servicio de usuarios");
         }
     }
+    private String obtenerNombreServicio(Long idServicio, String token) {
+        try {
+            return webClient.get()
+                    .uri(String.format(servicioPath, idServicio))
+                    .header("Authorization", token)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } catch (WebClientRequestException e) {
+            logger.warn("No se pudo obtener nombre del servicio id={}", idServicio);
+            return "Reserva de servicio";
+        }
+    }
+
+    private Boolean validarTratamientoRemoto(Long idTratamiento, String token) {
+        try {
+            return webClient.get()
+                    .uri(String.format(tratamientoPath, idTratamiento))
+                    .header("Authorization", token)
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .block();
+        } catch (WebClientRequestException e) {
+            logger.error("Error de conexion al validar tratamiento id={}: {}", idTratamiento, e.getMessage());
+            throw new BadRequestException("No se pudo conectar con el servicio de tratamientos");
+        }
+    }
+    private Boolean validarServicioRemoto(Long idServicio, String token) {
+        try {
+            return webClient.get()
+                    .uri(String.format(servicioExistsPath, idServicio))
+                    .header("Authorization", token)
+                    .retrieve()
+                    .bodyToMono(Boolean.class)
+                    .block();
+        } catch (WebClientRequestException e) {
+            logger.error("Error de conexion al validar servicio id={}: {}", idServicio, e.getMessage());
+            throw new BadRequestException("No se pudo conectar con el servicio de servicios");
+        }
+    }
+
+
 }

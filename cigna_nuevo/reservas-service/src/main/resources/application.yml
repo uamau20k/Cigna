@@ -19,6 +19,11 @@ api:
   base-url: http://api-gateway:9090
   usuario:
     exists: /usuarios/%d/exists
+  servicio:
+    exists: /servicios/%d/exists
+    nombre: /servicios/%d/nombre
+  tratamiento:
+    exists: /tratamientos/%d/exists
 
 springdoc:
   api-docs:
