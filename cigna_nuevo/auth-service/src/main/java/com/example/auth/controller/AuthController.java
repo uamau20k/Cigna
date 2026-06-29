@@ -1,6 +1,9 @@
 package com.example.auth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +44,11 @@ public class AuthController {
         java.util.Map<String, String> resp = new java.util.HashMap<>();
         resp.put("message", resultado);
         return resp;
+    }
+
+    @GetMapping("/users/{id}/exists")
+    public ResponseEntity<Boolean> existeUsuario(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.existePorId(id));
     }
     
 }
