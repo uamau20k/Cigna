@@ -49,4 +49,8 @@ public class UserService {
 
         return "Usuario creado exitosamente!";
     }
+    
+    public boolean existePorId(Long id) {
+        return userRepository.existsById(id);
+    }
 }
