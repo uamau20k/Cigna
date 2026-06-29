@@ -23,13 +23,22 @@ public class DataLoader implements CommandLineRunner {
         Faker faker = new Faker();
         Random random = new Random();
         String[] estados = {"PENDIENTE", "PAGADO", "CANCELADO"};
+        String[][] compras = {
+            {"Consulta General", "Pago por consulta medica general con diagnostico."},
+            {"Cardiologia", "Pago por evaluacion cardiologica y electrocardiograma."},
+            {"Traumatologia", "Pago por atencion de lesion muscular y vendaje."},
+            {"Pediatria", "Pago por consulta pediatrica y control de crecimiento."},
+            {"Neurologia", "Pago por consulta neurologica y evaluacion de reflejos."}
+        };
+
         for (int i = 0; i < 5; i++) {
             Compra compra = new Compra();
             compra.setIdUsuario((long) random.nextInt(3) + 1);
             compra.setIdServicio((long) random.nextInt(3) + 1);
             compra.setFechaCompra(new Date());
             compra.setEstado(faker.options().option(estados));
-            compra.setDescripcion(faker.lorem().sentence());
+            int idx = random.nextInt(compras.length);
+            compra.setDescripcion(compras[idx][1]);
             compraRepository.save(compra);
         }
     }
