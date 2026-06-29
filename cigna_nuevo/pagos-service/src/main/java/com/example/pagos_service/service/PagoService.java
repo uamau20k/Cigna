@@ -37,7 +37,11 @@ public class PagoService {
             if (pago.getTotalPagar() <=0) throw new IllegalArgumentException("totalPagar requerido");
             if (pago.getMedioPago() == null || pago.getMedioPago().isBlank()) throw new IllegalArgumentException("medioPago requerido");
             if (pago.getFecha() == null) pago.setFecha(new Date());
+            if (pago.getTotalPagar() <= 0) throw new IllegalArgumentException(
+                "El total a pagar debe ser mayor a 0 (valorNeto=" + pago.getValorNeto() + 
+                ", descuento=" + pago.getDescuento() + "%)");
 
+                
             logger.info("ID COMPRA = {}", pago.getIdCompra());
 
             String uri = String.format(compraPath, pago.getIdCompra());
