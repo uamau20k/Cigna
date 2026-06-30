@@ -22,6 +22,9 @@ api:
   base-url: http://api-gateway:9090
   cliente:
     exists: /clientes/%d/exists
+  sucursal:
+    exists: /sucursales/%d/exists
+  
 
 springdoc:
   api-docs:

@@ -114,15 +114,15 @@ public class NotificacionController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar notificacion", description = "Elimina una notificación por su ID.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Notificacion eliminado exitosamente"),
+        @ApiResponse(responseCode = "200", description = "Notificacion eliminado exitosamente", content = @Content),
         @ApiResponse(responseCode = "404", description = "Notificacion no encontrado", content = @Content)
     })
-    public ResponseEntity<Void> eliminar(
+    public ResponseEntity<String> eliminar(
             @Parameter(description = "ID del notificacion a eliminar", example = "1")
             @PathVariable Long id) {
         logger.info("DELETE /notificaciones/{} - Solicitud para eliminar notificacion", id);
         notificacionService.eliminar(id);
         logger.debug("Notificacion ID {} eliminado exitosamente", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Notificacion con ID " + id + " eliminado exitosamente."); 
     }
 }
