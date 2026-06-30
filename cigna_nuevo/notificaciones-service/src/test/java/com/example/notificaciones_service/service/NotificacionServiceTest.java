@@ -33,7 +33,7 @@ class NotificacionServiceTest {
     void setUp() {
         ejemplo = new Notificacion();
         ejemplo.setId(1L);
-        ejemplo.setIdCliente(1L);
+        ejemplo.setIdUsuario(1L);
         ejemplo.setTipo("EMAIL");
         ejemplo.setMensaje("Su reserva ha sido confirmada");
         ejemplo.setFechaEnvio(new java.util.Date());

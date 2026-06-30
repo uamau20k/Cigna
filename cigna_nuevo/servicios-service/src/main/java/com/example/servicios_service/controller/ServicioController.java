@@ -122,15 +122,15 @@ public class ServicioController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar servicio", description = "Elimina un servicio médico del catálogo.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Servicio eliminado exitosamente"),
+        @ApiResponse(responseCode = "200", description = "Servicio eliminado exitosamente"),
         @ApiResponse(responseCode = "404", description = "Servicio no encontrado", content = @Content)
     })
-    public ResponseEntity<Void> eliminar(
+    public ResponseEntity<String> eliminar(
             @Parameter(description = "ID del servicio a eliminar", example = "1")
             @PathVariable Long id) {
         logger.info("DELETE /servicios/{} - Solicitud para eliminar servicio", id);
         servicioService.eliminar(id);
         logger.debug("Servicio ID {} eliminado exitosamente", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Servicio eliminado exitosamente");
     }
 }

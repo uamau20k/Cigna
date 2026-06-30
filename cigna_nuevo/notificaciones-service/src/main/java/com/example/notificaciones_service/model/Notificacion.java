@@ -16,9 +16,9 @@ public class Notificacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull(message="El ID del cliente es obligatorio")
+    @NotNull(message="El ID del usuario es obligatorio")
     @Column(nullable = false)
-    private Long idCliente;
+    private Long idUsuario;
     @NotBlank(message="El tipo es obligatorio") @Pattern(regexp="EMAIL|SMS|PUSH")
     @Column(nullable = false)
     private String tipo;
