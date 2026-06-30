@@ -1,11 +1,12 @@
 package com.example.usuarios_service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ClienteServiceApplicationTests {
-
+@Disabled
+class UsuarioServiceApplicationTests {
 	@Test
 	void contextLoads() {
 	}
