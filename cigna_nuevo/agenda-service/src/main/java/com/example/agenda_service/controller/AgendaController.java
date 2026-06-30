@@ -82,11 +82,12 @@ public class AgendaController {
                 schema = @Schema(implementation = Agenda.class))),
         @ApiResponse(responseCode = "400", description = "Datos de entrada invalidos", content = @Content)
     })
+    
     public ResponseEntity<AgendaDTO> crear(
-            @Parameter(description = "Datos del agenda a crear")
-            @Valid @RequestBody AgendaDTO dto) {
+            @Valid @RequestBody AgendaDTO dto,
+            @RequestHeader("Authorization") String token) {
         logger.info("POST /agendas - Solicitud para crear agenda");
-        Agenda nuevo = agendaService.guardar(dto.toModel());
+        Agenda nuevo = agendaService.guardar(dto.toModel(), token);
         logger.debug("Agenda creado exitosamente con ID: {}", nuevo.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(AgendaDTO.fromModel(nuevo));
     }
@@ -104,9 +105,10 @@ public class AgendaController {
             @Parameter(description = "ID del agenda a actualizar", example = "1")
             @PathVariable Long id,
             @Parameter(description = "Nuevos datos del agenda")
-            @Valid @RequestBody AgendaDTO dto) {
+            @Valid @RequestBody AgendaDTO dto,
+            @RequestHeader("Authorization") String token) {
         logger.info("PUT /agendas/{} - Solicitud para actualizar agenda", id);
-        Agenda actualizado = agendaService.actualizar(id, dto.toModel());
+        Agenda actualizado = agendaService.actualizar(id, dto.toModel(), token);
         logger.debug("Agenda ID {} actualizado correctamente", id);
         return ResponseEntity.ok(AgendaDTO.fromModel(actualizado));
     }
@@ -117,12 +119,12 @@ public class AgendaController {
         @ApiResponse(responseCode = "204", description = "Agenda eliminado exitosamente"),
         @ApiResponse(responseCode = "404", description = "Agenda no encontrado", content = @Content)
     })
-    public ResponseEntity<Void> eliminar(
+    public ResponseEntity<String> eliminar(
             @Parameter(description = "ID del agenda a eliminar", example = "1")
             @PathVariable Long id) {
         logger.info("DELETE /agendas/{} - Solicitud para eliminar agenda", id);
         agendaService.eliminar(id);
         logger.debug("Agenda ID {} eliminado exitosamente", id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Agenda eliminado exitosamente");
     }
 }

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.agenda_service.dto.AgendaDTO;
 import com.example.agenda_service.service.AgendaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -94,30 +95,32 @@ public class AgendaControllerTest {
     @DisplayName("POST /agendas - crea agenda correctamente")
     void testCrear() throws Exception {
         // GIVEN
-        when(agendaService.guardar(any())).thenReturn(agenda);
+        when(agendaService.guardar(any(), anyString())).thenReturn(agenda);
 
         // WHEN / THEN
         mockMvc.perform(post("/agendas")
+                        .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.id").value(1L));
-        verify(agendaService, times(1)).guardar(any());
+        verify(agendaService, times(1)).guardar(any(), anyString());
     }
 
     @Test
     @DisplayName("PUT /agendas/{id} - actualiza agenda correctamente")
     void testActualizar() throws Exception {
         // GIVEN
-        when(agendaService.actualizar(eq(1L), any())).thenReturn(agenda);
+        when(agendaService.actualizar(eq(1L), any(), anyString())).thenReturn(agenda);
 
         // WHEN / THEN
         mockMvc.perform(put("/agendas/1")
+                        .header("Authorization", "Bearer token")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L));
-        verify(agendaService, times(1)).actualizar(eq(1L), any());
+        verify(agendaService, times(1)).actualizar(eq(1L), any(), anyString());
     }
 
     @Test
@@ -128,7 +131,8 @@ public class AgendaControllerTest {
 
         // WHEN / THEN
         mockMvc.perform(delete("/agendas/1"))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk())
+                .andExpect(content().string("Agenda eliminado exitosamente"));
         verify(agendaService, times(1)).eliminar(1L);
     }
 }
