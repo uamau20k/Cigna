@@ -32,7 +32,7 @@ public class DataLoader implements CommandLineRunner {
 
         for (int i = 0; i < 5; i++) {
             Notificacion notificacion = new Notificacion();
-            notificacion.setIdCliente((long) random.nextInt(5) + 1);
+            notificacion.setIdUsuario((long) random.nextInt(5) + 1);
             notificacion.setTipo(tipos[random.nextInt(tipos.length)]);
             notificacion.setMensaje(mensajes[random.nextInt(mensajes.length)]);
             notificacion.setFechaEnvio(new java.util.Date());

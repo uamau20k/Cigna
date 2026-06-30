@@ -21,9 +21,9 @@ public class NotificacionDTO {
     @Schema(description = "ID unico de la notificacion", example = "1")
     private Long id;
 
-    @NotNull(message = "El ID del cliente es obligatorio")
-    @Schema(description = "ID del paciente destinatario", example = "1")
-    private Long idCliente;
+    @NotNull(message = "El ID del usuario es obligatorio")
+    @Schema(description = "ID del usuario destinatario", example = "1")
+    private Long idUsuario;
 
     @NotBlank(message = "El tipo es obligatorio")
     @Pattern(regexp = "EMAIL|SMS|PUSH")
@@ -43,12 +43,12 @@ public class NotificacionDTO {
     private Boolean leido;
 
     public Notificacion toModel() {
-        return new Notificacion(id, idCliente, tipo, mensaje, fechaEnvio, leido);
+        return new Notificacion(id, idUsuario, tipo, mensaje, fechaEnvio, leido);
     }
 
     public static NotificacionDTO fromModel(Notificacion n) {
         if (n == null) return null;
-        return new NotificacionDTO(n.getId(), n.getIdCliente(), n.getTipo(),
+        return new NotificacionDTO(n.getId(), n.getIdUsuario(), n.getTipo(),
                 n.getMensaje(), n.getFechaEnvio(), n.getLeido());
     }
 }

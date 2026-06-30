@@ -43,7 +43,7 @@ public class NotificacionControllerTest {
         notificacion = new Notificacion(1L, 1L, "EMAIL", "Su reserva ha sido confirmada", new java.util.Date(), false);
         dto = new NotificacionDTO();
         dto.setId(1L);
-        dto.setIdCliente(1L);
+        dto.setIdUsuario(1L);
         dto.setTipo("EMAIL");
         dto.setMensaje("Su reserva ha sido confirmada");
         dto.setLeido(false);
