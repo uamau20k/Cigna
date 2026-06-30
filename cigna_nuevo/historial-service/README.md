@@ -4,10 +4,10 @@
 Gestión de historial clínico para el sistema de comercio.
 
 ## Responsabilidad
-Registra diagnósticos y tratamientos asociados a un cliente.
+Registra diagnósticos y tratamientos asociados a un usuario. Valida la existencia del usuario antes de crear o actualizar un registro.
 
 ## Comunicación entre servicios
-→ cliente-service (`/clientes/{id}/exists`)
+→ usuarios-service (`/usuarios/{id}/exists`)
 
 ## Endpoints principales
 
@@ -15,6 +15,8 @@ Registra diagnósticos y tratamientos asociados a un cliente.
 |--------|------|-------------|
 | GET | `/historial` | Listar todos |
 | GET | `/historial/{id}` | Obtener por ID |
+| GET | `/historial/{id}/exists` | Verificar existencia |
+| GET | `/historial/usuario/{idUsuario}` | Listar por usuario |
 | GET | `/historial/v2` | Listar con HATEOAS |
 | GET | `/historial/v2/{id}` | Obtener con HATEOAS |
 | POST | `/historial` | Crear |
@@ -47,7 +49,7 @@ Autenticación: **Bearer JWT** (obtener token en `auth-service` → `POST /auth/
 # Con perfil de desarrollo
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
-# O directamente (usa application.properties)
+# O directamente (usa application.yml)
 ./mvnw spring-boot:run
 ```
 
