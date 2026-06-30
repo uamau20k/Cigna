@@ -27,7 +27,7 @@ MySQL: `bd_servicios`
 
 ## Comunicación entre servicios
 - **Consume:** Ninguno
-- **Es consumido por:** agenda-service, reservas-service
+- **Es consumido por:** agenda-service, reservas-service, compras-service
 
 ## Swagger UI
 ```
