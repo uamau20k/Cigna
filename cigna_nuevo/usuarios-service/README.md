@@ -1,10 +1,10 @@
 # usuarios-service
 
 ## Descripción
-Microservicio de gestión de clientes del sistema.
+Gestión de usuarios del sistema.
 
 ## Responsabilidad
-Administra el CRUD de clientes. Expone el endpoint `/clientes/{id}/exists` que otros servicios consultan para validar que un cliente existe antes de crear compras, reservas o historiales.
+Administra el CRUD de usuarios. Expone el endpoint `/usuarios/{id}/exists` que otros servicios consultan para validar que un usuario existe antes de crear compras, reservas o historiales.
 
 ## Puerto
 `9091`
@@ -16,19 +16,12 @@ MySQL: `bd_usuarios`
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/clientes` | Listar todos los clientes |
-| GET | `/clientes/{id}` | Obtener cliente por ID |
-| GET | `/clientes/{id}/exists` | Verificar si existe (usado por otros servicios) |
-| POST | `/clientes` | Crear cliente |
-
-### Ejemplo crear cliente
-```json
-POST /clientes
-{
-  "nombre": "Juan Pérez",
-  "correo": "juan@ejemplo.cl"
-}
-```
+| GET | `/usuarios` | Listar todos los usuarios |
+| GET | `/usuarios/{id}` | Obtener usuario por ID |
+| GET | `/usuarios/{id}/exists` | Verificar si existe (usado por otros servicios) |
+| POST | `/usuarios` | Crear usuario |
+| PUT | `/usuarios/{id}` | Actualizar usuario |
+| DELETE | `/usuarios/{id}` | Eliminar usuario |
 
 ## Swagger UI
 ```
@@ -36,10 +29,10 @@ http://localhost:9091/doc/swagger-ui.html
 ```
 
 ## Persistencia
-- **Liquibase** (`db.changelog.sql`): inserta clientes iniciales al arrancar
+- **Liquibase** (`db.changelog.sql`): inserta usuarios iniciales al arrancar
 
 ## Comunicación
-Es consumido por: `compra-service`, `reserva-service`, `historial-service`
+Es consumido por: `compras-service`, `reservas-service`, `historial-service`, `agenda-service`, `notificaciones-service`
 
 ## Variables de entorno requeridas
 

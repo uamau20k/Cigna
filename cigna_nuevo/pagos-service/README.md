@@ -7,7 +7,7 @@ Gestión de pagos para el sistema de comercio.
 Calcula IVA (19%) y aplica descuentos sobre el valor neto.
 
 ## Comunicación entre servicios
-→ compra-service (`/compras/{id}/exists`)
+→ compras-service (`/compras/{id}/exists`)
 
 ## Endpoints principales
 

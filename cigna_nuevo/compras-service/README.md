@@ -1,37 +1,35 @@
-# historial-service
+# compras-service
 
 ## Descripción
-Gestión de historial clínico para el sistema de comercio.
+Gestión de compras de servicios médicos para el sistema de comercio.
 
 ## Responsabilidad
-Registra diagnósticos y tratamientos asociados a un usuario. Valida la existencia del usuario antes de crear o actualizar un registro.
+Valida estados (PENDIENTE/PAGADO/CANCELADO) y verifica la existencia del usuario y del servicio antes de registrar o actualizar una compra.
 
 ## Comunicación entre servicios
-→ usuarios-service (`/usuarios/{id}/exists`)
+→ usuarios-service (`/usuarios/{id}/exists`)  
+→ servicios-service (`/servicios/{id}/exists`)
 
 ## Endpoints principales
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/historial` | Listar todos |
-| GET | `/historial/{id}` | Obtener por ID |
-| GET | `/historial/{id}/exists` | Verificar existencia |
-| GET | `/historial/usuario/{idUsuario}` | Listar por usuario |
-| GET | `/historial/v2` | Listar con HATEOAS |
-| GET | `/historial/v2/{id}` | Obtener con HATEOAS |
-| POST | `/historial` | Crear |
-| PUT | `/historial/{id}` | Actualizar |
-| DELETE | `/historial/{id}` | Eliminar |
+| GET | `/compras` | Listar todos |
+| GET | `/compras/{id}` | Obtener por ID |
+| GET | `/compras/{id}/exists` | Verificar existencia |
+| POST | `/compras` | Crear |
+| PUT | `/compras/{id}` | Actualizar |
+| DELETE | `/compras/{id}` | Eliminar |
 
 ## Puerto
-`9097`
+`9098`
 
 ## Base de datos
-MySQL: `bd_historial`
+MySQL: `bd_compras`
 
 ## Swagger UI
 ```
-http://localhost:9097/doc/swagger-ui.html
+http://localhost:9098/doc/swagger-ui.html
 ```
 Autenticación: **Bearer JWT** (obtener token en `auth-service` → `POST /auth/login`)
 
@@ -56,7 +54,7 @@ Autenticación: **Bearer JWT** (obtener token en `auth-service` → `POST /auth/
 ## Ejecución con Docker
 ```bash
 # Desde la raíz del proyecto
-docker compose up historial-service --build
+docker compose up compras-service --build
 ```
 
 ## Despliegue en Railway/Render

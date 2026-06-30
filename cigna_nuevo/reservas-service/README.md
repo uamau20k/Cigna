@@ -4,10 +4,12 @@
 Gestión de reservas para el sistema de comercio.
 
 ## Responsabilidad
-Valida estados (PENDIENTE/CONFIRMADA/CANCELADA). Solo reservas PENDIENTE pueden cancelarse.
+Valida estados (PENDIENTE/CONFIRMADA/CANCELADA). Solo reservas en estado PENDIENTE pueden cancelarse. Valida existencia de usuario, servicio y tratamiento antes de crear o actualizar una reserva.
 
 ## Comunicación entre servicios
-→ cliente-service (`/clientes/{id}/exists`)
+→ usuarios-service (`/usuarios/{id}/exists`)
+→ servicios-service (`/servicios/{id}/exists`, `/servicios/{id}/nombre`)
+→ tratamientos-service (`/tratamientos/{id}/exists`)
 
 ## Endpoints principales
 
@@ -15,10 +17,13 @@ Valida estados (PENDIENTE/CONFIRMADA/CANCELADA). Solo reservas PENDIENTE pueden 
 |--------|------|-------------|
 | GET | `/reservas` | Listar todos |
 | GET | `/reservas/{id}` | Obtener por ID |
+| GET | `/reservas/{id}/exists` | Verificar existencia |
+| GET | `/reservas/usuario/{idUsuario}` | Listar por usuario |
 | GET | `/reservas/v2` | Listar con HATEOAS |
 | GET | `/reservas/v2/{id}` | Obtener con HATEOAS |
 | POST | `/reservas` | Crear |
 | PUT | `/reservas/{id}` | Actualizar |
+| PATCH | `/reservas/{id}/cancelar` | Cancelar (solo si PENDIENTE) |
 | DELETE | `/reservas/{id}` | Eliminar |
 
 ## Puerto
@@ -47,7 +52,7 @@ Autenticación: **Bearer JWT** (obtener token en `auth-service` → `POST /auth/
 # Con perfil de desarrollo
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
-# O directamente (usa application.properties)
+# O directamente (usa application.yml)
 ./mvnw spring-boot:run
 ```
 
