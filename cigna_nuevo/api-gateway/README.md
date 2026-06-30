@@ -16,13 +16,16 @@ Puerta de entrada centralizada del sistema. Enruta todas las solicitudes hacia l
 | Ruta | Servicio destino | Puerto |
 |------|-----------------|--------|
 | `/auth/**` | auth-service | 9094 |
-| `/clientes/**` | cliente-service | 9091 |
-| `/compras/**` | compra-service | 9092 |
-| `/productos/**` | producto-service | 9093 |
-| `/pagos/**` | pago-service | 9095 |
-| `/reservas/**` | reserva-service | 9096 |
+| `/usuarios/**` | usuarios-service | 9091 |
+| `/sucursales/**` | sucursales-service | 9099 |
+| `/servicios/**` | servicios-service | 9100 |
+| `/agendas/**` | agenda-service | 9101 |
+| `/reservas/**` | reservas-service | 9096 |
+| `/pagos/**` | pagos-service | 9095 |
+| `/notificaciones/**` | notificaciones-service | 9102 |
+| `/tratamientos/**` | tratamientos-service | 9103 |
 | `/historial/**` | historial-service | 9097 |
-| `/envios/**` | envio-service | 9098 |
+| `/compras/**` | compras-service | 9098 |
 
 ## Seguridad
 - `/auth/**` → público (no requiere token)
