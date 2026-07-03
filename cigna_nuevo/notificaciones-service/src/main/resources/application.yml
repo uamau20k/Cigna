@@ -17,8 +17,10 @@ server:
 
 api:
   base-url: http://api-gateway:9090
-  cliente:
-    exists: /clientes/%d/exists
+  usuario:
+    exists: /usuarios/%d/exists
+    
+SECRET: ${SECRET}
 
 springdoc:
   api-docs:
