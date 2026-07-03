@@ -1,10 +1,10 @@
 # notificaciones-service
 
 ## Descripción
-Gestión de notificaciones enviadas a pacientes.
+Gestión de notificaciones enviadas a usuarios.
 
 ## Responsabilidad
-Registra y gestiona notificaciones (EMAIL, SMS, PUSH) dirigidas a pacientes. Valida existencia del paciente vía WebClient.
+Registra y gestiona notificaciones (EMAIL, SMS, PUSH) dirigidas a usuarios. Valida existencia del usuario vía WebClient.
 
 ## Puerto
 `9102`

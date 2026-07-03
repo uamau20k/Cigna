@@ -114,15 +114,15 @@ public class SucursalController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar sucursal", description = "Elimina una sucursal del sistema por su ID.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Sucursal eliminado exitosamente"),
+        @ApiResponse(responseCode = "200", description = "Sucursal eliminada exitosamente"),
         @ApiResponse(responseCode = "404", description = "Sucursal no encontrado", content = @Content)
     })
-    public ResponseEntity<Void> eliminar(
+    public ResponseEntity<String> eliminar(
             @Parameter(description = "ID del sucursal a eliminar", example = "1")
             @PathVariable Long id) {
         logger.info("DELETE /sucursales/{} - Solicitud para eliminar sucursal", id);
         sucursalService.eliminar(id);
-        logger.debug("Sucursal ID {} eliminado exitosamente", id);
-        return ResponseEntity.noContent().build();
+        logger.debug("Sucursal ID {} eliminada exitosamente", id);
+        return ResponseEntity.ok("Sucursal eliminada exitosamente");
     }
 }
