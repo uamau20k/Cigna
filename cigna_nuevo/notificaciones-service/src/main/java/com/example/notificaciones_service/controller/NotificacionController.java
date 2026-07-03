@@ -83,13 +83,15 @@ public class NotificacionController {
         @ApiResponse(responseCode = "400", description = "Datos de entrada invalidos", content = @Content)
     })
     public ResponseEntity<NotificacionDTO> crear(
-            @Parameter(description = "Datos del notificacion a crear")
-            @Valid @RequestBody NotificacionDTO dto) {
-        logger.info("POST /notificaciones - Solicitud para crear notificacion");
-        Notificacion nuevo = notificacionService.guardar(dto.toModel());
-        logger.debug("Notificacion creado exitosamente con ID: {}", nuevo.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(NotificacionDTO.fromModel(nuevo));
-    }
+        @Parameter(description = "Datos del notificacion a crear")
+        @Valid @RequestBody NotificacionDTO dto,
+        @RequestHeader("Authorization") String token) {
+
+    logger.info("POST /notificaciones - Solicitud para crear notificacion");
+    Notificacion nuevo = notificacionService.guardar(dto.toModel(), token);
+    logger.debug("Notificacion creado exitosamente con ID: {}", nuevo.getId());
+    return ResponseEntity.status(HttpStatus.CREATED).body(NotificacionDTO.fromModel(nuevo));
+}
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar notificacion", description = "Actualiza los datos de una notificación existente.")
@@ -104,9 +106,10 @@ public class NotificacionController {
             @Parameter(description = "ID del notificacion a actualizar", example = "1")
             @PathVariable Long id,
             @Parameter(description = "Nuevos datos del notificacion")
-            @Valid @RequestBody NotificacionDTO dto) {
+            @Valid @RequestBody NotificacionDTO dto,
+            @RequestHeader("Authorization") String token) {
         logger.info("PUT /notificaciones/{} - Solicitud para actualizar notificacion", id);
-        Notificacion actualizado = notificacionService.actualizar(id, dto.toModel());
+        Notificacion actualizado = notificacionService.actualizar(id, dto.toModel(), token);
         logger.debug("Notificacion ID {} actualizado correctamente", id);
         return ResponseEntity.ok(NotificacionDTO.fromModel(actualizado));
     }
