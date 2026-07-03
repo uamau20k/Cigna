@@ -45,12 +45,12 @@ public class NotificacionService {
 
    public Notificacion guardar(Notificacion notificacion, String token) {
         logger.info("Guardando notificacion");
-        Boolean existeUsuario = validarUsuarioRemoto(notificacion.getIdCliente(), token);
+        Boolean existeUsuario = validarUsuarioRemoto(notificacion.getIdUsuario(), token);
         if (existeUsuario == null) {
             throw new BadRequestException("No se pudo validar la existencia del usuario");
         }
         if (Boolean.FALSE.equals(existeUsuario)) {
-            logger.warn("Usuario no existe id={}", notificacion.getIdCliente());
+            logger.warn("Usuario no existe id={}", notificacion.getIdUsuario());
             throw new ResourceNotFoundException("Usuario no existe");
         }
         if (notificacion.getFechaEnvio() == null) {
@@ -76,7 +76,7 @@ public class NotificacionService {
         if (!notificacionRepository.existsById(id))
             throw new ResourceNotFoundException("Notificacion no existe con id: " + id);
         notificacion.setId(id);
-        if (notificacion.getFechaEnvio() == null) {  // <-- agrega esto
+        if (notificacion.getFechaEnvio() == null) {
             notificacion.setFechaEnvio(new java.util.Date());
         }
         Notificacion actualizado = notificacionRepository.save(notificacion);
