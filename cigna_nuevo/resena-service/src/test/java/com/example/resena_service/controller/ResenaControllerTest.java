@@ -194,4 +194,105 @@ class ResenaControllerTest {
 
         verify(resenaService, times(1)).obtenerPromedioCalificacion(2L);
     }
+
+    @Test
+    @DisplayName("GET /resenas/{id} - retorna reseña existente")
+    void testObtenerResena() throws Exception {
+        // GIVEN
+        when(resenaService.obtenerPorId(1L)).thenReturn(resena);
+
+        // WHEN / THEN
+        mockMvc.perform(get("/resenas/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L));
+
+        verify(resenaService, times(1)).obtenerPorId(1L);
+    }
+
+    @Test
+    @DisplayName("GET /resenas/{id} - reseña no encontrada, devuelve 404")
+    void testObtenerResena_noEncontrada() throws Exception {
+        // GIVEN
+        when(resenaService.obtenerPorId(99L))
+            .thenThrow(new ResourceNotFoundException("Reseña no existe con id: 99"));
+
+        // WHEN / THEN
+        mockMvc.perform(get("/resenas/99"))
+                .andExpect(status().isNotFound());
+
+        verify(resenaService, times(1)).obtenerPorId(99L);
+    }
+
+    @Test
+    @DisplayName("GET /resenas/{id}/exists - verifica existencia")
+    void testExisteResena() throws Exception {
+        // GIVEN
+        when(resenaService.existePorId(1L)).thenReturn(true);
+
+        // WHEN / THEN
+        mockMvc.perform(get("/resenas/1/exists"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        verify(resenaService, times(1)).existePorId(1L);
+    }
+
+    @Test
+    @DisplayName("PUT /resenas/{id} - actualiza reseña correctamente")
+    void testActualizarResena() throws Exception {
+        // GIVEN
+        when(resenaService.actualizar(eq(1L), any(Resena.class))).thenReturn(resena);
+
+        // WHEN / THEN
+        mockMvc.perform(put("/resenas/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L));
+
+        verify(resenaService, times(1)).actualizar(eq(1L), any(Resena.class));
+    }
+
+    @Test
+    @DisplayName("PUT /resenas/{id} - reseña no encontrada, devuelve 404")
+    void testActualizarResena_noEncontrada() throws Exception {
+        // GIVEN
+        when(resenaService.actualizar(eq(99L), any(Resena.class)))
+            .thenThrow(new ResourceNotFoundException("Reseña no existe con id: 99"));
+
+        // WHEN / THEN
+        mockMvc.perform(put("/resenas/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isNotFound());
+
+        verify(resenaService, times(1)).actualizar(eq(99L), any(Resena.class));
+    }
+
+    @Test
+    @DisplayName("DELETE /resenas/{id} - elimina reseña correctamente")
+    void testEliminarResena() throws Exception {
+        // GIVEN
+        doNothing().when(resenaService).eliminar(1L);
+
+        // WHEN / THEN
+        mockMvc.perform(delete("/resenas/1"))
+                .andExpect(status().isOk());
+
+        verify(resenaService, times(1)).eliminar(1L);
+    }
+
+    @Test
+    @DisplayName("DELETE /resenas/{id} - reseña no encontrada, devuelve 404")
+    void testEliminarResena_noEncontrada() throws Exception {
+        // GIVEN
+        doThrow(new ResourceNotFoundException("Reseña no existe con id: 99"))
+            .when(resenaService).eliminar(99L);
+
+        // WHEN / THEN
+        mockMvc.perform(delete("/resenas/99"))
+                .andExpect(status().isNotFound());
+
+        verify(resenaService, times(1)).eliminar(99L);
+    }
 }

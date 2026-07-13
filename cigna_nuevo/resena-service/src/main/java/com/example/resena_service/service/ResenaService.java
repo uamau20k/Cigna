@@ -147,4 +147,41 @@ public class ResenaService {
         logger.info("Total reseñas encontradas: {}", resenas.size());
         return resenas;
     }
+
+    public Resena obtenerPorId(Long id) {
+        logger.info("Buscando reseña id={}", id);
+        return resenaRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Reseña no encontrada id={}", id);
+                    return new ResourceNotFoundException("Reseña no existe con id: " + id);
+                });
+    }
+
+    public boolean existePorId(Long id) {
+        return resenaRepository.existsById(id);
+    }
+
+    public Resena actualizar(Long id, Resena resena) {
+        logger.info("Actualizando reseña id={}", id);
+        Resena existente = resenaRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Reseña no encontrada id={}", id);
+                    return new ResourceNotFoundException("Reseña no existe con id: " + id);
+                });
+        existente.setCalificacion(resena.getCalificacion());
+        existente.setComentario(resena.getComentario());
+        Resena actualizada = resenaRepository.save(existente);
+        logger.info("Reseña actualizada id={}", id);
+        return actualizada;
+    }
+
+    public void eliminar(Long id) {
+        logger.info("Eliminando reseña id={}", id);
+        if (!resenaRepository.existsById(id)) {
+            logger.warn("Reseña no encontrada id={}", id);
+            throw new ResourceNotFoundException("Reseña no existe con id: " + id);
+        }
+        resenaRepository.deleteById(id);
+        logger.info("Reseña eliminada id={}", id);
+    }
 }
