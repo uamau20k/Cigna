@@ -49,4 +49,5 @@ cd compras-service
 call .\mvnw clean
 cd ..
 
+
 echo Done!
