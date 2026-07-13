@@ -117,4 +117,66 @@ public class ResenaController {
         Double promedio = resenaService.obtenerPromedioCalificacion(idServicio);
         return ResponseEntity.ok(promedio);
     }
+
+    @GetMapping("/{id}")
+    @Operation(summary = "Obtener reseña por ID", description = "Busca y retorna una reseña por su ID único.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reseña encontrada exitosamente",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Resena.class))),
+        @ApiResponse(responseCode = "404", description = "Reseña no encontrada", content = @Content)
+    })
+    public ResponseEntity<ResenaDTO> obtenerResena(
+            @Parameter(description = "ID de la reseña", example = "1")
+            @PathVariable Long id) {
+        logger.info("GET /resenas/{} - Obteniendo reseña", id);
+        return ResponseEntity.ok(ResenaDTO.fromModel(resenaService.obtenerPorId(id)));
+    }
+
+    @GetMapping("/{id}/exists")
+    @Operation(summary = "Verificar existencia de reseña", description = "Verifica si existe una reseña con el ID indicado.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Resultado de la verificacion")
+    })
+    public ResponseEntity<Boolean> existeResena(
+            @Parameter(description = "ID de la reseña a verificar", example = "1")
+            @PathVariable Long id) {
+        logger.info("GET /resenas/{}/exists", id);
+        return ResponseEntity.ok(resenaService.existePorId(id));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar reseña", description = "Actualiza la calificación y el comentario de una reseña existente.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reseña actualizada exitosamente",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Resena.class))),
+        @ApiResponse(responseCode = "400", description = "Datos de entrada invalidos", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Reseña no encontrada", content = @Content)
+    })
+    public ResponseEntity<ResenaDTO> actualizarResena(
+            @Parameter(description = "ID de la reseña a actualizar", example = "1")
+            @PathVariable Long id,
+            @Parameter(description = "Nuevos datos de la reseña")
+            @Valid @RequestBody ResenaDTO dto) {
+        logger.info("PUT /resenas/{} - Actualizando reseña", id);
+        Resena actualizada = resenaService.actualizar(id, dto.toModel());
+        logger.info("Reseña actualizada id={}", id);
+        return ResponseEntity.ok(ResenaDTO.fromModel(actualizada));
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar reseña", description = "Elimina una reseña del sistema.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Reseña eliminada exitosamente"),
+        @ApiResponse(responseCode = "404", description = "Reseña no encontrada", content = @Content)
+    })
+    public ResponseEntity<String> eliminarResena(
+            @Parameter(description = "ID de la reseña a eliminar", example = "1")
+            @PathVariable Long id) {
+        logger.info("DELETE /resenas/{} - Eliminando reseña", id);
+        resenaService.eliminar(id);
+        logger.info("Reseña eliminada id={}", id);
+        return ResponseEntity.ok("Reseña eliminada exitosamente");
+    }
 }

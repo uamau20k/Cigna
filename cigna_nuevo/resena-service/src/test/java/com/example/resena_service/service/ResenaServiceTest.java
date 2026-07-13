@@ -1,6 +1,7 @@
 package com.example.resena_service.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +9,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.resena_service.exception.BadRequestException;
 import com.example.resena_service.exception.ConflictException;
@@ -289,5 +291,114 @@ class ResenaServiceTest {
 
         assertNotNull(resultado);
         assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    @DisplayName("obtenerPorId - retorna la reseña cuando existe")
+    void testObtenerPorId() {
+        Resena r1 = new Resena();
+        r1.setId(1L);
+
+        when(resenaRepository.findById(1L)).thenReturn(Optional.of(r1));
+
+        Resena resultado = resenaService.obtenerPorId(1L);
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId());
+        verify(resenaRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("obtenerPorId - lanza ResourceNotFoundException cuando no existe")
+    void testObtenerPorId_noExiste() {
+        when(resenaRepository.findById(99L)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(
+            ResourceNotFoundException.class,
+            () -> resenaService.obtenerPorId(99L)
+        );
+
+        assertTrue(ex.getMessage().contains("99"));
+        verify(resenaRepository, times(1)).findById(99L);
+    }
+
+    @Test
+    @DisplayName("existePorId - retorna true cuando existe")
+    void testExistePorId_true() {
+        when(resenaRepository.existsById(1L)).thenReturn(true);
+
+        assertTrue(resenaService.existePorId(1L));
+    }
+
+    @Test
+    @DisplayName("existePorId - retorna false cuando no existe")
+    void testExistePorId_false() {
+        when(resenaRepository.existsById(99L)).thenReturn(false);
+
+        assertFalse(resenaService.existePorId(99L));
+    }
+
+    @Test
+    @DisplayName("actualizar - actualiza calificación y comentario de una reseña existente")
+    void testActualizar() {
+        Resena existente = new Resena();
+        existente.setId(1L);
+        existente.setIdUsuario(1L);
+        existente.setIdServicio(2L);
+        existente.setCalificacion(3);
+        existente.setComentario("Comentario original");
+
+        Resena cambios = new Resena();
+        cambios.setCalificacion(5);
+        cambios.setComentario("Comentario actualizado");
+
+        when(resenaRepository.findById(1L)).thenReturn(Optional.of(existente));
+        when(resenaRepository.save(any(Resena.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Resena resultado = resenaService.actualizar(1L, cambios);
+
+        assertNotNull(resultado);
+        assertEquals(5, resultado.getCalificacion());
+        assertEquals("Comentario actualizado", resultado.getComentario());
+        assertEquals(1L, resultado.getIdUsuario());
+        assertEquals(2L, resultado.getIdServicio());
+        verify(resenaRepository, times(1)).save(any(Resena.class));
+    }
+
+    @Test
+    @DisplayName("actualizar - lanza ResourceNotFoundException cuando la reseña no existe")
+    void testActualizar_noExiste() {
+        when(resenaRepository.findById(99L)).thenReturn(Optional.empty());
+
+        Resena cambios = new Resena();
+        cambios.setCalificacion(5);
+
+        assertThrows(
+            ResourceNotFoundException.class,
+            () -> resenaService.actualizar(99L, cambios)
+        );
+        verify(resenaRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("eliminar - elimina la reseña cuando existe")
+    void testEliminar() {
+        when(resenaRepository.existsById(1L)).thenReturn(true);
+
+        resenaService.eliminar(1L);
+
+        verify(resenaRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("eliminar - lanza ResourceNotFoundException cuando la reseña no existe")
+    void testEliminar_noExiste() {
+        when(resenaRepository.existsById(99L)).thenReturn(false);
+
+        assertThrows(
+            ResourceNotFoundException.class,
+            () -> resenaService.eliminar(99L)
+        );
+        verify(resenaRepository, never()).deleteById(any());
     }
 }
