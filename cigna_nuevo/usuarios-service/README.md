@@ -32,7 +32,7 @@ http://localhost:9091/doc/swagger-ui.html
 - **Liquibase** (`db.changelog.sql`): inserta usuarios iniciales al arrancar
 
 ## Comunicación
-Es consumido por: `compras-service`, `reservas-service`, `historial-service`, `agenda-service`, `notificaciones-service`, `resena-service`
+Es consumido por: `compras-service`, `reservas-service`, `historial-service`, `agenda-service`, `notificaciones-service`
 
 ## Variables de entorno requeridas
 

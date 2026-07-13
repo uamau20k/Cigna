@@ -49,9 +49,5 @@ cd compras-service
 call .\mvnw package -DskipTests
 cd ..
 
-cd resena-service
-call .\mvnw package -DskipTests
-cd ..
-
 echo All services built successfully!
 docker compose up --build

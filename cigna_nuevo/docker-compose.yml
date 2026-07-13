@@ -114,14 +114,3 @@ services:
     depends_on:
       - usuarios-service
       - servicios-service
-
-  resena-service:
-    build: ./resena-service
-    ports:
-      - "9104:9104"
-    environment:
-      <<: *common-env
-    depends_on:
-      - usuarios-service
-      - servicios-service
-      - compras-service

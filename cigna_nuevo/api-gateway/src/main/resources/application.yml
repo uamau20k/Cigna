@@ -69,8 +69,3 @@ spring:
           uri: http://compras-service:9098
           predicates:
             - Path=/compras/**
-
-        - id: resena-service
-          uri: http://resena-service:9104
-          predicates:
-            - Path=/resenas/**
