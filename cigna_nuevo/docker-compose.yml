@@ -20,6 +20,8 @@ services:
       - notificaciones-service
       - tratamientos-service
       - historial-service
+      - compras-service
+      - resena-service
 
   auth-service:
     build: ./auth-service
@@ -105,10 +107,21 @@ services:
 
   compras-service:
     build: ./compras-service
-    ports: 
+    ports:
       - "9098:9098"
-    environment:  
+    environment:
       <<: *common-env
     depends_on:
-      - usuarios-service  
+      - usuarios-service
       - servicios-service
+
+  resena-service:
+    build: ./resena-service
+    ports:
+      - "9104:9104"
+    environment:
+      <<: *common-env
+    depends_on:
+      - usuarios-service
+      - servicios-service
+      - compras-service

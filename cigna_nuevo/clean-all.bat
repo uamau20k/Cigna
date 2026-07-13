@@ -49,4 +49,8 @@ cd compras-service
 call .\mvnw clean
 cd ..
 
+cd resena-service
+call .\mvnw clean
+cd ..
+
 echo Done!

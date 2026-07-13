@@ -26,6 +26,7 @@ Puerta de entrada centralizada del sistema. Enruta todas las solicitudes hacia l
 | `/tratamientos/**` | tratamientos-service | 9103 |
 | `/historial/**` | historial-service | 9097 |
 | `/compras/**` | compras-service | 9098 |
+| `/resenas/**` | resena-service | 9104 |
 
 ## Seguridad
 - `/auth/**` → público (no requiere token)
