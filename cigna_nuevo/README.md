@@ -48,7 +48,6 @@ Se recomienda iniciar en el siguiente orden:
 10. Historial Service
 11. Sucursal Service
 12. Notificación Service
-13. Reseña Service
 
 ---
 
@@ -89,7 +88,6 @@ dentro de cigna-nuevo:
 | Historial Service    | `historial-service/README.md`    |
 | Sucursal Service     | `sucursal-service/README.md`     |
 | Notificación Service | `notificacion-service/README.md` |
-| Reseña Service       | `resena-service/README.md`       |
 
 ---
 
