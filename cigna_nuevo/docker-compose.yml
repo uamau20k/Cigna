@@ -21,7 +21,6 @@ services:
       - tratamientos-service
       - historial-service
       - compras-service
-      - resena-service
 
   auth-service:
     build: ./auth-service
