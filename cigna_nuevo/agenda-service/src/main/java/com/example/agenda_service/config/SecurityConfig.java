@@ -27,7 +27,16 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        SecretKeySpec key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
-        return NimbusJwtDecoder.withSecretKey(key).build();
+        SecretKeySpec key = new SecretKeySpec(
+            secret.getBytes(StandardCharsets.UTF_8),
+            "HmacSHA512"
+        );
+
+        NimbusJwtDecoder decoder =
+            NimbusJwtDecoder.withSecretKey(key)
+            .macAlgorithm(org.springframework.security.oauth2.jose.jws.MacAlgorithm.HS512)
+            .build();
+
+        return decoder;
     }
 }
