@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 
@@ -38,10 +37,16 @@ public class SecurityConfig {
 
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
+
         SecretKeySpec key = new SecretKeySpec(
             secret.getBytes(StandardCharsets.UTF_8),
-            "HmacSHA256"
+            "HmacSHA512"
         );
-        return NimbusReactiveJwtDecoder.withSecretKey(key).build();
+
+        return NimbusReactiveJwtDecoder
+                .withSecretKey(key)
+                .macAlgorithm(org.springframework.security.oauth2.jose.jws.MacAlgorithm.HS512)
+                .build();
     }
+
 }

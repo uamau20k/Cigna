@@ -1,10 +1,12 @@
 package com.example.auth.service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.JwtException;
@@ -14,9 +16,13 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    private final Key key = Keys.hmacShaKeyFor("esta_es_mi_compleja_clave_secreta".getBytes());
-//    private final Key key = Keys.hmacShaKeyFor("9f3c2a87d1e64b55c6f4ab90e1d73c5f2d89b7aa34df56e0a1bf92c47e68d12f".getBytes());
+     private final Key key;
 
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(
+            secret.getBytes(StandardCharsets.UTF_8)
+        );
+    }
 
     public String generateToken(String email) {
         Date ahora = new Date();

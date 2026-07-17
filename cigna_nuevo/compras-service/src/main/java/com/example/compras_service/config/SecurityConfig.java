@@ -40,6 +40,11 @@ public class SecurityConfig {
             "HmacSHA512"
         );
 
-        return NimbusJwtDecoder.withSecretKey(key).build();
+        NimbusJwtDecoder decoder =
+            NimbusJwtDecoder.withSecretKey(key)
+            .macAlgorithm(org.springframework.security.oauth2.jose.jws.MacAlgorithm.HS512)
+            .build();
+
+        return decoder;
     }
 }
